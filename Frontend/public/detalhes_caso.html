@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DENTEFIER - Relatório de Caso</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="js/main.js" defer></script>
+</head>
+<body>
+  <!-- Banner principal -->
+  <div class="top-banner">
+    <div class="banner-content">
+      <div class="logo-container">
+        <img src="images/logo_dentefier.png" alt="Logo DENTEFIER" class="main-logo">
+      </div>
+      <div class="banner-text">
+        <h1>DENTEFIER</h1>
+        <span class="origin-badge">Laudos e Perícias</span>
+        <p>Sistema de Gerenciamento de Casos Odontolegais</p>
+      </div>
+    </div>
+    <div class="accessibility-tools">
+      <button class="access-btn" id="contrast-toggle"><img src="images/icon-contrast.png" alt="Contraste"></button>
+      <button class="access-btn" id="font-increase"><img src="images/icon-font-increase.png" alt="Aumentar fonte"></button>
+      <button class="access-btn" id="font-decrease"><img src="images/icon-font-decrease.png" alt="Diminuir fonte"></button>
+    </div>
+  </div>
+
+  <header>
+    <nav>
+      <ul>
+        <li><a href="tela_inicio.html">HOME</a></li>
+        <li><a href="gerenciar_casos.html">GERENCIAR CASOS</a></li>
+        <li class="admin-only"><a href="gerenciar_usuario.html">USUÁRIOS</a></li>
+        <li><a href="dashboard_busca.html">HISTÓRICO</a></li>
+        <li><a href="lougout.html">SAIR</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="container" id="relatorio-content">
+    <div class="welcome-section">
+      <h2>Relatório de Caso Odontolegal</h2>
+      <div class="date-info">
+        <p>Data: <span id="current-date">15 de Abril de 2025</span></p>
+      </div>
+    </div>
+
+    <div class="report-actions">
+      <a href="evidencia.html"><button class="btn-action admin-perito" id="add-evidence-btn">Adicionar Evidências</button></a>
+      <a href="relatorio.html"><button class="btn-action admin-perito" id="new-case-btn">Gerar Relatório</button></a>
+    </div>
+      
+    <!-- Dados do Caso -->
+    <section class="evidence-form-section">
+      <div class="form-header">
+        <h3>1. Dados do Caso</h3>
+      </div>
+      <div class="form-grid">
+        <div class="form-column">
+          <div class="form-group">
+            <label>Número do BO:</label>
+            <p class="report-data">BO-2025/0423-87654</p>
+          </div>
+          <div class="form-group">
+            <label>ID do Laudo Pericial:</label>
+            <p class="report-data">LP-2025/IML-1234</p>
+          </div>
+          <div class="form-group">
+            <label>Data e Hora de Registro:</label>
+            <p class="report-data">10/04/2025 - 14:35</p>
+          </div>
+        </div>
+        <div class="form-column">
+          <div class="form-group">
+            <label>Tipo de Crime:</label>
+            <p class="report-data">Homicídio</p>
+          </div>
+          <div class="form-group">
+            <label>Status do Caso:</label>
+            <p class="report-data"><span class="status-badge open">Em andamento</span></p>
+          </div>
+          <div class="form-group">
+            <label>Prioridade:</label>
+            <p class="report-data">Alta</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Identificação do Examinado -->
+    <section class="evidence-form-section">
+      <div class="form-header">
+        <h3>2. Identificação do Examinado</h3>
+      </div>
+      <div class="form-grid">
+        <div class="form-column">
+          <div class="form-group">
+            <label>Identificado:</label>
+            <p class="report-data">Sim</p>
+          </div>
+          <div class="form-group">
+            <label>Nome completo:</label>
+            <p class="report-data">João Carlos da Silva</p>
+          </div>
+          <div class="form-group">
+            <label>Sexo:</label>
+            <p class="report-data">Masculino</p>
+          </div>
+          <div class="form-group">
+            <label>Idade:</label>
+            <p class="report-data">37 anos</p>
+          </div>
+        </div>
+        <div class="form-column">
+          <div class="form-group">
+            <label>Documento de identidade:</label>
+            <p class="report-data">RG: 12.345.678-9 SSP/SP</p>
+          </div>
+          <div class="form-group">
+            <label>Estado:</label>
+            <p class="report-data">Cadáver</p>
+          </div>
+          <div class="form-group">
+            <label>Condições do corpo:</label>
+            <p class="report-data">Cadáver em estágio inicial de decomposição, com lesões compatíveis com ferimentos por arma de fogo na região torácica.</p>
+          </div>
+          <div class="form-group">
+            <label>Fotografia:</label>
+            <div class="image-thumbnail">
+              <img src="/api/placeholder/150/150" alt="Fotografia do examinado">
+              <button class="view-btn">Ampliar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Local e Condições da Coleta -->
+    <section class="evidence-form-section">
+      <div class="form-header">
+        <h3>3. Local e Condições da Coleta</h3>
+      </div>
+      <div class="form-grid">
+        <div class="form-column">
+          <div class="form-group">
+            <label>Data e hora da coleta:</label>
+            <p class="report-data">09/04/2025 - 10:15</p>
+          </div>
+          <div class="form-group">
+            <label>Local do exame:</label>
+            <p class="report-data">Sala de Necropsia IML Central</p>
+          </div>
+        </div>
+        <div class="form-column">
+          <div class="form-group">
+            <label>Profissionais presentes:</label>
+            <p class="report-data">Dra. Oliveira (Perita Odontolegal), Dr. Santos (Legista), Técnico Carlos Mendes</p>
+          </div>
+          <div class="form-group">
+            <label>Equipamentos usados:</label>
+            <p class="report-data">Kit de Instrumentos Odontológicos Forenses, Câmera Digital Canon EOS 90D, Microscópio Digital Portátil, Scanner 3D intraoral</p>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Registro fotográfico:</label>
+        <div class="gallery-thumbnails">
+          <div class="thumbnail">
+            <img src="/api/placeholder/120/120" alt="Foto 1">
+            <button class="view-btn">Ver</button>
+          </div>
+          <div class="thumbnail">
+            <img src="/api/placeholder/120/120" alt="Foto 2">
+            <button class="view-btn">Ver</button>
+          </div>
+          <div class="thumbnail">
+            <img src="/api/placeholder/120/120" alt="Foto 3">
+            <button class="view-btn">Ver</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Procedimentos Realizados -->
+    <section class="evidence-form-section">
+      <div class="form-header">
+        <h3>4. Procedimentos Realizados</h3>
+      </div>
+      <div class="form-grid">
+        <div class="form-column">
+          <div class="form-group">
+            <label>Tipo de exame odontológico forense:</label>
+            <p class="report-data">Identificação humana</p>
+          </div>
+          <div class="form-group">
+            <label>Técnicas aplicadas:</label>
+            <p class="report-data">Análise comparativa de registros dentários, Odontograma post-mortem, Radiografia panorâmica, Fotografias intrabucais</p>
+          </div>
+        </div>
+        <div class="form-column">
+          <div class="form-group">
+            <label>Amostras coletadas:</label>
+            <p class="report-data">Swab de DNA da mucosa bucal, Impressões dentárias, Fragmentos de material protético para análise</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Informações Antemortem -->
+    <section class="evidence-form-section">
+      <div class="form-header">
+        <h3>5. Informações Antemortem</h3>
+      </div>
+      <div class="form-grid">
+        <div class="form-column">
+          <div class="form-group">
+            <label>Dados odontológicos anteriores disponíveis:</label>
+            <p class="report-data">Sim</p>
+          </div>
+          <div class="form-group">
+            <label>Dentista responsável:</label>
+            <p class="report-data">Dr. Roberto Alves - CRO-SP 15478</p>
+          </div>
+        </div>
+        <div class="form-column">
+          <div class="form-group">
+            <label>Nome do familiar que forneceu os dados:</label>
+            <p class="report-data">Maria Helena da Silva (esposa)</p>
+          </div>
+          <div class="form-group">
+            <label>Documentos fornecidos:</label>
+            <div class="document-list">
+              <p>- Prontuário odontológico (Clínica OdontoSaúde)</p>
+              <p>- Radiografias panorâmicas (2023)</p>
+              <p>- Fotografias do sorriso</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Achados Odontológicos -->
+    <section class="evidence-form-section">
+      <div class="form-header">
+        <h3>6. Achados Odontológicos</h3>
+      </div>
+      
+      <div class="odontogram-container">
+        <div class="odontogram-image">
+          <img src="/api/placeholder/500/200" alt="Odontograma">
+        </div>
+      </div>
+      
+      <div class="form-grid">
+        <div class="form-column">
+          <div class="form-group">
+            <label>Lesões encontradas:</label>
+            <p class="report-data">Fratura oblíqua do incisivo central superior direito (#11). Ausência de traumatismos recentes nas demais estruturas dentárias.</p>
+          </div>
+          <div class="form-group">
+            <label>Fraturas/traumas:</label>
+            <p class="report-data">Fratura antiga do côndilo mandibular direito, evidenciada por exame radiográfico.</p>
+          </div>
+        </div>
+        <div class="form-column">
+          <div class="form-group">
+            <label>Reconstruções/protéticos:</label>
+            <p class="report-data">Coroa metalocerâmica no dente #36. Restaurações em resina composta nos dentes #16, #15, #25, #26, #46. Tratamento endodôntico nos dentes #36 e #46.</p>
+          </div>
+          <div class="form-group">
+            <label>Anomalias dentárias:</label>
+            <p class="report-data">Dente supranumerário entre #32 e #33. Hipoplasia de esmalte generalizada leve.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Conclusão Preliminar -->
+    <section class="evidence-form-section">
+      <div class="form-header">
+        <h3>7. Conclusão Preliminar</h3>
+      </div>
+      <div class="form-group">
+        <p class="report-data conclusion-text">
+          Com base na análise comparativa entre os registros odontológicos antemortem e os achados postmortem, é possível afirmar com alto grau de certeza que o cadáver examinado pertence ao indivíduo João Carlos da Silva, sexo masculino, 37 anos. A identificação positiva foi estabelecida pela coincidência de 12 pontos específicos na arcada dentária, incluindo padrões de restaurações, ausências dentárias e características anatômicas particulares. Esta conclusão é fundamentada nas técnicas de identificação odontolegal amplamente aceitas na literatura forense, com probabilidade de acerto estimada em 99,7%.
+        </p>
+      </div>
+    </section>
+
+    <!-- Responsáveis pela Perícia -->
+    <section class="evidence-form-section">
+      <div class="form-header">
+        <h3>8. Responsáveis pela Perícia</h3>
+      </div>
+      <div class="form-grid">
+        <div class="form-column">
+          <div class="form-group">
+            <label>Nome do perito odontolegista:</label>
+            <p class="report-data">Dra. Carolina Oliveira</p>
+          </div>
+          <div class="form-group">
+            <label>CRO:</label>
+            <p class="report-data">CRO-SP 24589</p>
+          </div>
+        </div>
+        <div class="form-column">
+          <div class="form-group">
+            <label>Instituição:</label>
+            <p class="report-data">Instituto Médico Legal - São Paulo</p>
+          </div>
+          <div class="form-group">
+            <label>Nome do auxiliar:</label>
+            <p class="report-data">Carlos Mendes - Técnico em Perícias</p>
+          </div>
+        </div>
+      </div>
+      <div class="signatures">
+        <div class="signature-block">
+          <img src="/api/placeholder/200/80" alt="Assinatura Digital">
+          <p>Assinatura Digital - Dra. Carolina Oliveira</p>
+          <p>Data: 15/04/2025</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Observações Gerais -->
+    <section class="evidence-form-section">
+      <div class="form-header">
+        <h3>9. Observações Gerais</h3>
+      </div>
+      <div class="form-group">
+        <p class="report-data">
+          O presente laudo foi elaborado em conformidade com as normas técnicas estabelecidas pelo Conselho Federal de Odontologia na Resolução CFO 63/2005 e suas atualizações. Todo o material biológico coletado foi devidamente armazenado segundo protocolos de cadeia de custódia para eventuais contraprovas. As fotografias e registros digitais foram realizados com escalas métricas de referência ABFO. Recomenda-se a correlação destes achados com outras evidências médico-legais para conclusão definitiva do caso.
+        </p>
+      </div>
+    </section>
+
+    <!-- Anexo de Evidências -->
+    <section class="evidence-form-section">
+      <div class="form-header">
+        <h3>10. Anexo de Evidências</h3>
+        <p>Total de evidências: 5</p>
+      </div>
+      
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Tipo</th>
+              <th>Descrição</th>
+              <th>Data de Inclusão</th>
+              <th>Incluído por</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>EV-2025-0423-01</td>
+              <td>Documento</td>
+              <td>Prontuário odontológico antemortem</td>
+              <td>10/04/2025</td>
+              <td>Dra. Oliveira</td>
+              <td>
+                <button class="table-btn view-btn">Ver</button>
+              </td>
+            </tr>
+            <tr>
+              <td>EV-2025-0423-02</td>
+              <td>Imagem</td>
+              <td>Radiografia panorâmica postmortem</td>
+              <td>10/04/2025</td>
+              <td>Técnico Mendes</td>
+              <td>
+                <button class="table-btn view-btn">Ver</button>
+              </td>
+            </tr>
+            <tr>
+              <td>EV-2025-0423-03</td>
+              <td>Imagem</td>
+              <td>Fotografias intrabucais - conjunto</td>
+              <td>10/04/2025</td>
+              <td>Dra. Oliveira</td>
+              <td>
+                <button class="table-btn view-btn">Ver</button>
+              </td>
+            </tr>
+            <tr>
+              <td>EV-2025-0423-04</td>
+              <td>Laudo</td>
+              <td>Análise comparativa de padrões dentários</td>
+              <td>12/04/2025</td>
+              <td>Dra. Oliveira</td>
+              <td>
+                <button class="table-btn view-btn">Ver</button>
+              </td>
+            </tr>
+            <tr>
+              <td>EV-2025-0423-05</td>
+              <td>Documento</td>
+              <td>Relatório de análise DNA bucal</td>
+              <td>14/04/2025</td>
+              <td>Lab. Genética Forense</td>
+              <td>
+                <button class="table-btn view-btn">Ver</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-logo">
+        <img src="images/logo_dentefier.jpg" alt="DENTEFIER">
+        <p>DENTEFIER &copy; 2025</p>
+      </div>
+      
+      <div class="footer-origin">
+        <p>Sistema de Gerenciamento de Casos Odontolegais</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Atualizar a data atual
+      const options = { year: 'numeric', month: 'long', day: 'numeric' };
+      document.getElementById('current-date').textContent = new Date().toLocaleDateString('pt-BR', options);
+      
+      // Contraste Alto
+      document.getElementById('contrast-toggle').addEventListener('click', function() {
+        document.body.classList.toggle('high-contrast');
+      });
+      
+      // Função para exportar para PDF
+      if (document.getElementById('export-pdf')) {
+        document.getElementById('export-pdf').addEventListener('click', function() {
+          const { jsPDF } = window.jspdf;
+          
+          // Alerta o usuário que o PDF está sendo gerado
+          alert("Preparando o PDF do relatório. Por favor, aguarde...");
+          
+          // Configuração do PDF
+          const doc = new jsPDF('p', 'mm', 'a4');
+          const content = document.getElementById('relatorio-content');
+          
+          html2canvas(content, {
+            scale: 2, // Melhor qualidade
+            useCORS: true,
+            logging: false,
+            onclone: function(clonedDoc) {
+              // Ajustar o clone para melhor visualização no PDF
+              const buttons = clonedDoc.querySelectorAll('.table-btn, .report-actions');
+              buttons.forEach(button => {
+                button.style.display = 'none';
+              });
+            }
+          }).then(canvas => {
+            const imgData = canvas.toDataURL('image/jpeg', 1.0);
+            const imgWidth = 210; // A4 width in mm
+            const pageHeight = 295; // A4 height in mm
+            const imgHeight = canvas.height * imgWidth / canvas.width;
+            let heightLeft = imgHeight;
+            let position = 0;
+            
+            doc.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight);
+            heightLeft -= pageHeight;
+            
+            // Adicionar novas páginas se o conteúdo for muito longo
+            while (heightLeft > 0) {
+              position = heightLeft - imgHeight;
+              doc.addPage();
+              doc.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight);
+              heightLeft -= pageHeight;
+            }
+            
+            doc.save('Relatorio_Caso_Odontolegal.pdf');
+          });
+        });
+      }
+      
+      // Função para imprimir o relatório
+      if (document.getElementById('print-report')) {
+        document.getElementById('print-report').addEventListener('click', function() {
+          window.print();
+        });
+      }
+      
+      // Simulação de perfil de usuário
+      function ajustarInterfacePorPerfil(perfil) {
+        const adminElements = document.querySelectorAll('.admin-only');
+        const adminPeritoElements = document.querySelectorAll('.admin-perito');
+        
+        if (perfil === 'Administrador') {
+          adminElements.forEach(el => el.style.display = 'block');
+          adminPeritoElements.forEach(el => el.style.display = 'block');
+        } else if (perfil === 'Perito') {
+          adminElements.forEach(el => el.style.display = 'none');
+          adminPeritoElements.forEach(el => el.style.display = 'block');
+        } else if (perfil === 'Assistente') {
+          adminElements.forEach(el => el.style.display = 'none');
+          adminPeritoElements.forEach(el => el.style.display = 'none');
+        }
+      }
+      
+      // Simulando perfil para teste
+      ajustarInterfacePorPerfil('Administrador');
+    });
+  </script>
+
+  <style>
+    /* Estilos específicos para a página de relatório */
+    .report-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+  margin-bottom: 20px;
+  color: black; /* Aqui define a cor do texto */
+}
+
+    .btn-action {
+      padding: 10px 15px;
+      background-color: var(--cor-destaque);
+      color: rgb(19, 18, 18);
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background-color 0.3s;
+    }
+    
+    .btn-action:hover {
+      background-color: var(--cor-destaque-hover, #0056b3);
+    }
+    
+    /* Classe oculta por padrão, exibida apenas com JavaScript dependendo do perfil */
+    .admin-perito {
+      display: none;
+    }
+    
+    .report-data {
+      background-color: rgba(0, 0, 0, 0.1);
+      padding: 10px;
+      border-radius: 4px;
+      margin-top: 5px;
+    }
+    
+    .conclusion-text {
+      font-style: italic;
+      font-size: 1.05rem;
+      line-height: 1.6;
+    }
+    
+    .document-list {
+      background-color: rgba(0, 0, 0, 0.1);
+      padding: 10px;
+      border-radius: 4px;
+    }
+    
+    .image-thumbnail, .thumbnail {
+      background-color: rgba(0, 0, 0, 0.1);
+      padding: 10px;
+      border-radius: 4px;
+      display: inline-block;
+      text-align: center;
+    }
+    
+    .gallery-thumbnails {
+      display: flex;
+      gap: 15px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+    
+    .signatures {
+      margin-top: 30px;
+      text-align: center;
+    }
+    
+    .signature-block {
+      display: inline-block;
+      padding: 15px;
+      border: 1px dashed var(--cor-destaque);
+      border-radius: 4px;
+    }
+    
+    .odontogram-container {
+      margin: 20px 0;
+      text-align: center;
+    }
+    
+    /* Estilos de impressão */
+    @media print {
+      .top-banner, header, footer, .report-actions, .table-btn {
+        display: none !important;
+      }
+      
+      .container {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+      }
+      
+      body {
+        background-color: white;
+        color: black;
+      }
+      
+      .evidence-form-section {
+        page-break-inside: avoid;
+        margin-bottom: 20px;
+        border: 1px solid #ccc;
+      }
+    }
+  </style>
+</body>
+</html>

@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dashboard de Casos - Perito</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="preconnect" href="https://maps.googleapis.com">
+  <link rel="dns-prefetch" href="https://maps.googleapis.com">
+  <script src="js/navbar.js" defer></script>
+</head>
+
+<body>
+  <!-- Banner principal -->
+  <div class="top-banner">
+    <div class="banner-content">
+      <div class="logo-container">
+        <img src="images/logo_dentefier.png" alt="Logo DENTEFIER" class="main-logo">
+      </div>
+      <div class="banner-text">
+        <h1>DENTEFIER</h1>
+        <span class="origin-badge">Laudos e Perícias</span>
+        <p>Sistema de Gerenciamento de Casos Odontolegais</p>
+      </div>
+    </div>
+    <div class="accessibility-tools">
+      <button class="access-btn" id="btn-contrast"><img src="images/icon-contrast.png" alt="Contraste"></button>
+      <button class="access-btn" id="btn-font-increase"><img src="images/icon-font-increase.png" alt="Aumentar fonte"></button>
+      <button class="access-btn" id="btn-font-decrease"><img src="images/icon-font-decrease.png" alt="Diminuir fonte"></button>
+    </div>
+  </div>
+
+  <header>
+    <nav>
+      <ul>
+        <li><a href="tela_inicio.html" class="active">HOME</a></li>
+        <li><a href="gerenciar_casos.html">GERENCIAR CASOS</a></li>
+        <li class="admin-only"><a href="gerenciar_usuario.html">USUÁRIOS</a></li>
+        <li><a href="dashboard_busca.html">HISTÓRICO</a></li>
+        <li><a href="logout.html">SAIR</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section id="novoCaso">
+      <h2>Cadastrar Novo Caso</h2>
+      <div class="container">
+        <form id="form-caso">
+          <div class="section-title">
+            <h3>Identificação Básica</h3>
+          </div>
+          <div class="form-group">
+            <input type="text" name="numeroCaso" placeholder="Número do Caso" required class="input-large">
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <input type="text" name="titulo" placeholder="Título do Caso" required class="input-large">
+            </div>
+            <div class="form-group labelOculto">
+              <label for="dataAbertura">Data de Abertura:</label>
+              <input type="date" name="dataAbertura" required class="input-large">
+            </div>
+          </div>
+          <div class="form-group">
+            <input type="text" name="responsavel" placeholder="Responsável pelo Caso" required class="input-large">
+          </div>
+          <div class="form-group labelOculto">
+            <label for="status">Status:</label>
+            <select name="status" required class="input-large">
+              <option value="">Selecione o Status</option>
+              <option value="Em andamento">Em andamento</option>
+              <option value="Finalizado">Finalizado</option>
+              <option value="Arquivado">Arquivado</option>
+            </select>
+          </div>
+
+          <div class="section-title">
+            <h3>Dados do Caso</h3>
+          </div>
+          <div class="form-group">
+            <input type="text" name="numeroBO" placeholder="Número do BO (Boletim de Ocorrência)" required class="input-large">
+          </div>
+          <div class="form-group">
+            <input type="text" name="idLaudoPericial" placeholder="ID do Laudo Pericial" required class="input-large">
+          </div>
+          <div class="form-group labelOculto">
+            <label for="dataHoraRegistro">Data e hora registradas:</label>
+            <input type="datetime-local" name="dataHoraRegistro" placeholder="Data e hora do registro" required class="input-large">
+          </div>
+          <div class="form-group labelOculto">
+            <label>Tipo de crime:</label>
+            <select name="tipoCrime" id="tipoCrime" required class="input-large">
+              <option value="">Selecione o tipo de crime</option>
+              <option value="Homicídio">Homicídio</option>
+              <option value="Agressão física">Agressão física</option>
+              <option value="Violência doméstica">Violência doméstica</option>
+              <option value="Abuso sexual">Abuso sexual</option>
+              <option value="Desaparecido">Desaparecido (reconhecimento)</option>
+              <option value="Outros">Outros</option>
+            </select>
+            <div class="form-group" id="outroTipoCrimeContainer" style="display: none;">
+              <input type="text" name="outroTipoCrime" id="outroTipoCrimeTexto" placeholder="Especifique o tipo de crime" class="input-large">
+            </div>
+          </div>
+
+          <div class="section-title">
+            <h3>Identificação do Examinado</h3>
+          </div>
+          <div class="form-group">
+            <label>Examinado identificado?</label>
+            <select name="identificado" id="identificadoSelect" required class="input-large">
+              <option value="">Selecione</option>
+              <option value="sim">Sim</option>
+              <option value="nao">Não</option>
+            </select>
+          </div>
+          
+          <div id="campos-identificacao" style="display: none;">
+            <div class="form-group">
+              <input type="text" name="nomeCompleto" placeholder="Nome completo" class="input-large">
+            </div>
+            <div class="form-group labelOculto">
+              <label for="sexo">Sexo:</label>
+              <select name="sexo" id="sexo" class="input-large">
+                <option value="">Selecione o sexo</option>
+                <option value="masculino">Masculino</option>
+                <option value="feminino">Feminino</option>
+                <option value="outro">Outro</option>
+              </select>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <input type="number" name="idade" placeholder="Idade" min="0" max="120" class="input-large">
+              </div>
+              <div class="form-group checkbox-group">
+                <label>
+                  <input type="checkbox" name="idadeEstimada"> Idade estimada
+                </label>
+              </div>
+            </div>
+            <div class="form-group">
+              <input type="text" name="documento" placeholder="Documento de identidade (ou identificação post mortem)" class="input-large">
+            </div>
+            <div class="form-group labelOculto">
+              <label for="estadoCorpo">Estado do corpo:</label>
+              <select name="estadoCorpo" id="estadoCorpo" class="input-large">
+                <option value="">Selecione o estado do corpo</option>
+                <option value="vivo">Vivo</option>
+                <option value="cadaver">Cadáver</option>
+                <option value="ossada">Ossada</option>
+                <option value="materialIsolado">Material isolado</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <textarea name="condicoesCorpo" placeholder="Condições do corpo (descreva detalhadamente)" class="input-large"></textarea>
+            </div>
+            <div class="form-group">
+              <label for="fotografia">Fotografia:</label>
+              <input type="file" name="fotografia" id="fotografia" accept="image/*" class="input-large">
+              <p class="file-hint">Formatos aceitos: JPG, PNG, GIF. Tamanho máximo: 5MB</p>
+            </div>
+          </div>
+
+                    <!-- Substitua a seção de localização por: -->
+<div class="section-title"><h3>Localização do Caso</h3></div>
+<div class="form-group">
+  <!-- Campo de busca (Places) -->
+  <input id="pac-input" type="text" placeholder="Buscar local" class="input-large" />
+
+  <!-- Mapa -->
+  <div id="map" style="height:400px; width:100%;"></div>
+
+  <!-- Lat / Lng -->
+  <div class="form-row">
+    <div class="form-group">
+      <input type="number" step="any" id="latitude" name="lat" placeholder="Latitude" required class="input-large">
+    </div>
+    <div class="form-group">
+      <input type="number" step="any" id="longitude" name="lng" placeholder="Longitude" required class="input-large">
+    </div>
+  </div>
+  <!-- Endereço -->
+  <div class="form-row">
+    <div class="form-group">
+      <input type="text" id="enderecoCompleto" name="enderecoCompleto" placeholder="Endereço Completo" class="input-large">
+    </div>
+  </div>
+  <button type="button" id="btnLocalizacaoAtual" class="btn-secondary">
+    Usar Minha Localização Atual
+  </button>
+</div>
+
+          <div class="section-title">
+            <h3>Contexto do Caso</h3>
+          </div>
+          <div class="form-group">
+            <input type="text" name="tipoCaso" placeholder="Tipo de Caso" required class="input-large">
+          </div>
+          <div class="form-group">
+            <input type="text" name="origemDemanda" placeholder="Origem da Demanda" required class="input-large">
+          </div>
+          <div class="form-group">
+            <textarea name="descricao" placeholder="Descrição detalhada" required class="input-large"></textarea>
+          </div>
+          
+          <div class="action-buttons">
+            <button type="button" class="btn-proxima" onclick="window.location.href= 'cadastro_caso2.html'">Próxima Etapa 🡲</button>
+          </div>
+        </form>
+      </div>
+    </section>
+  </main>
+  <script src="js/cadastro_caso1.js"></script>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-logo">
+        <img src="images/logo_dentefier.png" alt="DENTEFIER">
+        <p>DENTEFIER &copy; 2025</p>
+      </div>
+      <div class="footer-origin">
+        <p>Sistema de Gerenciamento de Casos Odontolegais</p>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DENTEFIER - Gestão de Casos</title>
+  <style>
+    .btn-view {
+      background-color: var(--cor-destaque);
+      flex: 1;
+    }
+
+    .btn-edit {
+      background-color: #3498db;
+      color: white;
+      flex: 1;
+    }
+
+    .btn-evidence {
+      background-color: #9b59b6;
+      color: white;
+      flex: 1;
+    }
+
+    .btn-report {
+      background-color: #e74c3c;
+      color: white;
+      flex: 1;
+    }
+  </style>
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+  <script src="js/navbar.js" defer></script>
+</head>
+<body>
+  <div class="top-banner">
+    <div class="banner-content">
+      <div class="logo-container">
+        <img src="images/logo_dentefier.png" alt="Logo DENTEFIER" class="main-logo">
+      </div>
+      <div class="banner-text">
+        <h1>DENTEFIER</h1>
+        <span class="origin-badge">Laudos e Perícias</span>
+        <p>Sistema de Gerenciamento de Casos Odontolegais</p>
+      </div>
+    </div>
+    <div class="accessibility-tools">
+      <button class="access-btn" id="btn-contrast"><img src="images/icon-contrast.png" alt="Contraste"></button>
+      <button class="access-btn" id="btn-font-increase"><img src="images/icon-font-increase.png" alt="Aumentar fonte"></button>
+      <button class="access-btn" id="btn-font-decrease"><img src="images/icon-font-decrease.png" alt="Diminuir fonte"></button>
+    </div>
+  </div>
+
+  <header>
+    <nav>
+      <ul>
+        <li><a href="tela_inicio.html" class="active">HOME</a></li>
+        <li><a href="gerenciar_casos.html">GERENCIAR CASOS</a></li>
+        <li class="admin-only"><a href="gerenciar_usuario.html">USUÁRIOS</a></li>
+        <li><a href="dashboard_busca.html">HISTÓRICO</a></li>
+        <li><a href="logout.html">SAIR</a></li>
+      </ul>
+    </nav>
+  </header>
+  
+  <main class="container">
+    <div class="welcome-section">
+      <h2>Gerenciamento de Casos</h2>
+      <div class="date-info">
+        <p>Data: <span id="current-date"></span></p>
+      </div>
+    </div>
+
+    <div class="filter-tools">
+      <div class="search-container">
+        <input type="text" id="search-input" placeholder="Buscar casos por título ou código...">
+        <button id="search-btn">Buscar</button>
+      </div>
+      <select class="filter-dropdown" id="filter-status">
+        <option value="todos">Todos os Status</option>
+        <option value="Em andamento">Em andamento</option>
+        <option value="Finalizado">Finalizados</option>
+        <option value="Arquivado">Arquivados</option>
+      </select>
+      <select class="filter-dropdown" id="filter-type">
+        <option value="todos">Todos os Tipos</option>
+        <option value="Odontologia Forense">Odontologia Forense</option>
+        <option value="Identificação Humana">Identificação Humana</option>
+        <option value="Exame Criminal">Exame Criminal</option>
+        <option value="Trauma">Trauma</option>
+        <option value="Estimativa de Idade">Estimativa de Idade</option>
+        <option value="Outro">Outro</option>
+      </select>
+      <a href="cadastro_casounico.html"><button class="btn-new-case" id="new-case-btn">+ Novo Caso</button></a>
+    </div>
+
+    <div class="grid-layout" id="cases-container">
+      <!-- Os cards dos casos serão gerados dinamicamente pelo JavaScript -->
+    </div>
+
+    <div class="pagination" id="pagination-container">
+      <!-- A paginação será criada dinamicamente pelo JavaScript -->
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-logo">
+        <img src="images/logo_dentefier.png" alt="DENTEFIER">
+        <p>DENTEFIER &copy; <span id="current-year"></span></p>
+      </div>
+      <div class="footer-origin">
+        <p>Sistema de Gerenciamento de Casos Odontolegais</p>
+      </div>
+    </div>
+  </footer>
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Configurar a data atual
+      const currentDate = new Date();
+      const options = { year: 'numeric', month: 'long', day: 'numeric' };
+      document.getElementById('current-date').textContent = currentDate.toLocaleDateString('pt-BR', options);
+      document.getElementById('current-year').textContent = currentDate.getFullYear();
+      
+      // Função para buscar dados da API (simulada por enquanto)
+      function fetchCasesData() {
+        // Aqui você implementará a chamada real à sua API
+        // Por enquanto, usamos dados de exemplo
+        return new Promise((resolve) => {
+          // Simular uma chamada de API com o exemplo fornecido e mais alguns casos
+          setTimeout(() => {
+            const casosExemplo = [
+              {
+                "numeroCaso": "2025-042-BR",
+                "titulo": "Identificação de vítima por arcada dentária",
+                "dataAbertura": "2025-02-03T13:45:00.000Z",
+                "responsavel": "Dra. Juliana Peixoto",
+                "status": "Finalizado",
+                "contexto": {
+                  "tipoCaso": "Odontologia Forense",
+                  "origemDemanda": "IML Regional",
+                  "descricao": "Identificação de corpo em estado avançado de decomposição encontrado em área rural. Solicitada comparação com registros odontológicos."
+                },
+                "dadosIndividuo": {
+                  "nome": "Carlos Eduardo Santos",
+                  "idadeEstimado": 42,
+                  "sexo": "Masculino",
+                  "etnia": "Pardo",
+                  "identificadores": "Prótese parcial removível no arco superior, tratamento endodôntico em três molares",
+                  "antecedentes": "Pessoa desaparecida há 3 meses, registro policial existente"
+                },
+                "documentacao": {
+                  "registrosAnte": "Prontuário odontológico fornecido pelo dentista da família",
+                  "registrosPost": "Radiografias e fotografias da arcada dentária post-mortem",
+                  "fotografias": [
+                    "dent_042_antemortem.jpg",
+                    "dent_042_postmortem.jpg",
+                    "dent_042_comparison.jpg",
+                    "dent_042_match_points.jpg"
+                  ]
+                },
+                "cadeiaCustodia": {
+                  "evidencias": "Arcada dentária completa, radiografias originais",
+                  "dataColeta": "2025-02-01T10:30:00.000Z",
+                  "responsavelColeta": "Dr. Paulo Ribeiro"
+                },
+                "historico": [
+                  {
+                    "data": "2025-02-03T13:45:00.000Z",
+                    "responsavel": "Dra. Juliana Peixoto",
+                    "justificativa": "Abertura do caso e recebimento dos materiais",
+                    "substatus": "Análise inicial"
+                  },
+                  {
+                    "data": "2025-02-05T09:15:00.000Z",
+                    "responsavel": "Dra. Juliana Peixoto",
+                    "justificativa": "Comparação de registros ante-mortem e post-mortem",
+                    "substatus": "Análise comparativa"
+                  },
+                  {
+                    "data": "2025-02-08T16:20:00.000Z",
+                    "responsavel": "Dra. Juliana Peixoto",
+                    "justificativa": "Conclusão positiva da identificação com 12 pontos de correspondência",
+                    "substatus": "Finalizado"
+                  }
+                ],
+                "localizacao": {
+                  "lat": -22.912869,
+                  "lng": -43.230174,
+                  "enderecoCompleto": "Estrada Municipal KM 42, Zona Rural, Petrópolis - RJ"
+                }
+              },
+              {
+                "numeroCaso": "2025-043-BR",
+                "titulo": "Análise de Mordida - Caso Criminal 45/2025",
+                "dataAbertura": "2025-03-15T10:30:00.000Z",
+                "responsavel": "Dr. Ricardo Souza",
+                "status": "Em andamento",
+                "contexto": {
+                  "tipoCaso": "Exame Criminal",
+                  "origemDemanda": "Delegacia de Polícia",
+                  "descricao": "Análise de marcas de mordida em vítima de agressão para comparação com suspeito detido."
+                }
+              },
+              {
+                "numeroCaso": "2025-044-BR",
+                "titulo": "Trauma Facial - Acidente Automobilístico",
+                "dataAbertura": "2025-03-28T14:20:00.000Z",
+                "responsavel": "Dra. Carla Mendes",
+                "status": "Arquivado",
+                "contexto": {
+                  "tipoCaso": "Trauma",
+                  "origemDemanda": "Seguradora",
+                  "descricao": "Avaliação de lesões faciais para processo de indenização após acidente de trânsito."
+                }
+              },
+              {
+                "numeroCaso": "2025-045-BR",
+                "titulo": "Estimativa de Idade - Criança Desaparecida",
+                "dataAbertura": "2025-04-05T09:15:00.000Z",
+                "responsavel": "Dr. Paulo Santos",
+                "status": "Em andamento",
+                "contexto": {
+                  "tipoCaso": "Estimativa de Idade",
+                  "origemDemanda": "Vara da Infância e Juventude",
+                  "descricao": "Determinação da idade aproximada de criança encontrada sem documentação."
+                }
+              }
+            ];
+            resolve(casosExemplo);
+          }, 500);
+        });
+      }
+      
+      // Função para renderizar os cards dos casos
+      function renderCaseCards(casos) {
+        const casesContainer = document.getElementById('cases-container');
+        casesContainer.innerHTML = ''; // Limpa o container
+        
+        if (casos.length === 0) {
+          casesContainer.innerHTML = '<p class="no-results">Nenhum caso encontrado com os filtros selecionados.</p>';
+          return;
+        }
+        
+        casos.forEach(caso => {
+          // Determinar a classe de status para o indicador visual
+          let statusClass = '';
+          switch(caso.status) {
+            case 'Em andamento':
+              statusClass = 'status-aberto';
+              break;
+            case 'Finalizado':
+              statusClass = 'status-finalizado';
+              break;
+            case 'Arquivado':
+              statusClass = 'status-arquivado';
+              break;
+            default:
+              statusClass = 'status-aberto';
+          }
+          
+          // Formatar a data para exibição
+          const dataAbertura = new Date(caso.dataAbertura);
+          const dataFormatada = dataAbertura.toLocaleDateString('pt-BR');
+          
+          // Criar o card do caso
+          const cardHtml = `
+            <div class="case-card" data-id="${caso.numeroCaso}" data-status="${caso.status}" data-type="${caso.contexto?.tipoCaso || 'Não especificado'}">
+              <div class="case-header">
+                <h3 class="case-title">${caso.titulo}</h3>
+                <span class="case-type">${caso.contexto?.tipoCaso || 'Não especificado'}</span>
+              </div>
+              <div class="case-body">
+                <div class="case-info">
+                  <p><span class="case-info-label">Código:</span> #${caso.numeroCaso}</p>
+                  <p><span class="case-info-label">Data de entrada:</span> ${dataFormatada}</p>
+                  <p><span class="case-info-label">Responsável:</span> ${caso.responsavel}</p>
+                  <p><span class="case-info-label">Status:</span> 
+                    <span class="status-indicator ${statusClass}"></span> ${caso.status}
+                  </p>
+                </div>
+                <div class="case-actions">
+                  <a href="detalhes_caso.html?id=${encodeURIComponent(caso.numeroCaso)}"><button class="btn-view">Visualizar</button></a>
+                  <a href="evidencia.html?id=${encodeURIComponent(caso.numeroCaso)}"><button class="btn-evidence">Evidências</button></a>
+                  <a href="relatorio.html?id=${encodeURIComponent(caso.numeroCaso)}"><button class="btn-report">Relatório</button></a>
+                  <a href="detalhes_caso.html?id=${encodeURIComponent(caso.numeroCaso)}&editar=true"><button class="btn-edit">Editar</button></a>
+                </div>
+              </div>
+            </div>
+          `;
+          
+          casesContainer.innerHTML += cardHtml;
+        });
+      }
+      
+      // Função para criar paginação
+      function createPagination(totalItems, itemsPerPage = 6, currentPage = 1) {
+        const totalPages = Math.ceil(totalItems / itemsPerPage);
+        const paginationContainer = document.getElementById('pagination-container');
+        paginationContainer.innerHTML = '';
+        
+        if (totalPages <= 1) return;
+        
+        // Botão anterior
+        const prevButton = document.createElement('button');
+        prevButton.id = 'prev-page';
+        prevButton.innerHTML = '&laquo; Anterior';
+        prevButton.disabled = currentPage === 1;
+        prevButton.addEventListener('click', () => {
+          if (currentPage > 1) {
+            loadPage(currentPage - 1);
+          }
+        });
+        paginationContainer.appendChild(prevButton);
+        
+        // Números das páginas
+        for (let i = 1; i <= totalPages; i++) {
+          const pageButton = document.createElement('button');
+          pageButton.textContent = i;
+          if (i === currentPage) {
+            pageButton.classList.add('active');
+          }
+          pageButton.addEventListener('click', () => loadPage(i));
+          paginationContainer.appendChild(pageButton);
+        }
+        
+        // Botão próximo
+        const nextButton = document.createElement('button');
+        nextButton.id = 'next-page';
+        nextButton.innerHTML = 'Próximo &raquo;';
+        nextButton.disabled = currentPage === totalPages;
+        nextButton.addEventListener('click', () => {
+          if (currentPage < totalPages) {
+            loadPage(currentPage + 1);
+          }
+        });
+        paginationContainer.appendChild(nextButton);
+      }
+      
+      // Variáveis para controlar os filtros e paginação
+      let allCases = [];
+      let currentPage = 1;
+      const itemsPerPage = 6;
+      
+      // Função para carregar uma página específica
+      function loadPage(page) {
+        currentPage = page;
+        
+        // Aplicar filtros
+        const statusFilter = document.getElementById('filter-status').value;
+        const typeFilter = document.getElementById('filter-type').value;
+        const searchQuery = document.getElementById('search-input').value.toLowerCase();
+        
+        // Filtrar os casos
+        let filteredCases = allCases;
+        
+        if (statusFilter !== 'todos') {
+          filteredCases = filteredCases.filter(caso => caso.status === statusFilter);
+        }
+        
+        if (typeFilter !== 'todos') {
+          filteredCases = filteredCases.filter(caso => caso.contexto?.tipoCaso === typeFilter);
+        }
+        
+        if (searchQuery) {
+          filteredCases = filteredCases.filter(caso => 
+            caso.titulo.toLowerCase().includes(searchQuery) || 
+            caso.numeroCaso.toLowerCase().includes(searchQuery)
+          );
+        }
+        
+        // Calcular o início e o fim dos itens para a página atual
+        const startIndex = (page - 1) * itemsPerPage;
+        const endIndex = startIndex + itemsPerPage;
+        const casesToShow = filteredCases.slice(startIndex, endIndex);
+        
+        // Renderizar os cards e a paginação
+        renderCaseCards(casesToShow);
+        createPagination(filteredCases.length, itemsPerPage, page);
+      }
+      
+      // Configurar event listeners para os filtros
+      document.getElementById('filter-status').addEventListener('change', () => loadPage(1));
+      document.getElementById('filter-type').addEventListener('change', () => loadPage(1));
+      document.getElementById('search-btn').addEventListener('click', () => loadPage(1));
+      document.getElementById('search-input').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+          loadPage(1);
+        }
+      });
+      
+      // Inicializar a página
+      fetchCasesData().then(casos => {
+        allCases = casos;
+        loadPage(1);
+      }).catch(error => {
+        console.error('Erro ao carregar os dados:', error);
+        document.getElementById('cases-container').innerHTML = 
+          '<p class="error-message">Erro ao carregar os casos. Por favor, tente novamente mais tarde.</p>';
+      });
+    });
+  </script>
+</body>
+</html>

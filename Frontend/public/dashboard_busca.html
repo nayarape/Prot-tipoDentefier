@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Auditoria de Atividades</title>
+  <link rel="stylesheet" href="css/stylesauditoria.css">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <!-- Banner principal -->
+  <div class="top-banner">
+    <div class="banner-content">
+      <div class="logo-container">
+        <img src="images/logo_dentefier.png" alt="Logo DENTEFIER" class="main-logo">
+      </div>
+      <div class="banner-text">
+        <h1>DENTEFIER</h1>
+        <span class="origin-badge">Laudos e Perícias</span>
+        <p>Sistema de Gerenciamento de Casos Odontolegais</p>
+      </div>
+    </div>
+    <div class="accessibility-tools">
+      <button class="access-btn" id="btn-contrast"><img src="images/icon-contrast.png" alt="Contraste"></button>
+      <button class="access-btn" id="btn-font-increase"><img src="images/icon-font-increase.png" alt="Aumentar fonte"></button>
+      <button class="access-btn" id="btn-font-decrease"><img src="images/icon-font-decrease.png" alt="Diminuir fonte"></button>
+    </div>
+  </div>
+
+  <header>
+
+    <nav>
+      <ul>
+        <li><a href="tela_inicio.html" class="active">HOME</a></li>
+        <li><a href="gerenciar_casos.html">GERENCIAR CASOS</a></li>
+        <li class="admin-only"><a href="gerenciar_usuario.html">USUÁRIOS</a></li>
+        <li><a href="dashboard_busca.html">HISTÓRICO</a></li>
+        <li><a href="logout.html">SAIR</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section>
+      <h2>Logs de Atividades</h2>
+      <div class="container audit-container">
+        
+        <!-- Botão para exibir filtros -->
+        <button id="toggle-filters" class="btn-secondary toggle-filters-btn">Filtros</button>
+
+        <!-- Seção de Filtros (inicialmente oculta) -->
+        <div class="filter-section" id="filter-section">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="filter-date-start">Data Inicial:</label>
+              <input type="date" id="filter-date-start" class="input-large" value="2025-04-01">
+            </div>
+            <div class="form-group">
+              <label for="filter-date-end">Data Final:</label>
+              <input type="date" id="filter-date-end" class="input-large" value="2025-04-14">
+            </div>
+            <div class="form-group">
+              <label for="filter-status">Status:</label>
+              <select id="filter-status" class="input-large">
+                <option value="">Todos</option>
+                <option value="em_andamento" selected>Em andamento</option>
+                <option value="finalizado">Finalizado</option>
+                <option value="arquivado">Arquivado</option>
+                <option value="urgente">Urgente</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="filter-identificado">Identificado:</label>
+              <select id="filter-identificado" class="input-large">
+                <option value="">Todos</option>
+                <option value="sim" selected>Sim</option>
+                <option value="nao">Não</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="filter-crime">Tipo de Crime:</label>
+              <select id="filter-crime" class="input-large">
+                <option value="">Todos os tipos</option>
+                <option value="homicidio">Homicídio</option>
+                <option value="agressao_fisica">Agressão física</option>
+                <option value="violencia_domestica" selected>Violência doméstica</option>
+                <option value="abuso_sexual">Abuso sexual</option>
+                <option value="desaparecido">Desaparecido (reconhecimento)</option>
+                <option value="outros">Outros</option>
+              </select>
+            </div>
+          </div>
+          <div class="buttons-container">
+            <button id="limpar-filtro" class="btn-secondary">Limpar Filtros</button>
+            <button id="aplicar-filtro" class="btn-primary">Aplicar Filtros</button>
+          </div>
+        </div>
+
+        <!-- Cards de resultados dos filtros -->
+        <div class="cards-container">
+          <div class="card">
+            <h3>Casos Arquivados</h3>
+            <div class="card-content">
+              <div class="card-number" id="casos-arquivados">2</div>
+              <p>Armazenados para referência</p>
+            </div>
+            <button><a href="auditoria.detalhes.html" class="btn-link">Ver Detalhes</a></button>
+          </div>
+          
+          <div class="card">
+            <h3>Casos em Análise</h3>
+            <div class="card-content">
+              <div class="card-number" id="casos-analise">3</div>
+              <p>Em processo de investigação</p>
+            </div>
+            <button><a href="auditoria.detalhes.html" class="btn-link">Ver Detalhes</a></button>
+          </div>
+          
+          <div class="card">
+            <h3>Casos Urgentes</h3>
+            <div class="card-content">
+              <div class="card-number" id="casos-urgentes">1</div>
+              <p>Necessitam atenção imediata</p>
+            </div>
+            <button><a href="auditoria.detalhes.html" class="btn-link">Ver Detalhes</a></button>
+          </div>
+          
+          <div class="card">
+            <h3>Total de Usuários</h3>
+            <div class="card-content">
+              <div class="card-number" id="total-usuarios">5</div>
+              <p>Usuários ativos no sistema</p>
+            </div>
+            <button><a href="usuarios.html" class="btn-link">Ver Detalhes</a></button>
+          </div>
+        </div>
+        
+        <!-- Seção de Filtros Ativos -->
+        <div class="filtros-ativos" id="filtros-ativos">
+          <h3>Filtros Ativos</h3>
+          <div class="filtros-ativos-lista" id="filtros-ativos-lista">
+            <div class="filtro-tag">
+              Período: 01/04/2025 - 14/04/2025
+              <span class="remover" data-tipo="periodo">×</span>
+            </div>
+            <div class="filtro-tag">
+              Status: Em andamento
+              <span class="remover" data-tipo="status">×</span>
+            </div>
+            <div class="filtro-tag">
+              Identificado: Sim
+              <span class="remover" data-tipo="identificado">×</span>
+            </div>
+            <div class="filtro-tag">
+              Tipo de Crime: Violência doméstica
+              <span class="remover" data-tipo="tipo">×</span>
+            </div>
+          </div>
+          <button class="limpar-todos" id="limpar-todos">Limpar todos os filtros</button>
+        </div>
+        
+        <!-- Registros -->
+        <div class="section-title">
+          <h3>Registros de Atividades</h3>
+        </div>
+
+        <div class="log-list">
+          <ul id="activity-logs">
+            <!-- Resultados hipotéticos dos filtros aplicados -->
+            <li class="resultado-item">
+              <div class="log-header">
+                <span class="log-id">ID: #CR-2025-0038</span>
+                <span class="log-date">12/04/2025 10:23</span>
+                <span class="log-status status-em_andamento">Em andamento</span>
+              </div>
+              <div class="log-content">
+                <strong>Tipo:</strong> Violência doméstica | 
+                <strong>Identificado:</strong> Sim | 
+                <strong>Perito:</strong> Marcelo Silva | 
+                <strong>Local:</strong> São Paulo, SP
+              </div>
+              <div class="log-actions">
+                <button><a href="auditoria.detalhes.html" class="btn-small" data-id="CR-2025-0038">Detalhes</a></button>
+                <button class="btn-small" data-id="CR-2025-0038">Relatório</button>
+              </div>
+            </li>
+            
+            <li class="resultado-item">
+              <div class="log-header">
+                <span class="log-id">ID: #CR-2025-0032</span>
+                <span class="log-date">10/04/2025 15:47</span>
+                <span class="log-status status-em_andamento">Em andamento</span>
+              </div>
+              <div class="log-content">
+                <strong>Tipo:</strong> Violência doméstica | 
+                <strong>Identificado:</strong> Sim | 
+                <strong>Perito:</strong> Ana Oliveira | 
+                <strong>Local:</strong> Belo Horizonte, MG
+              </div>
+              <div class="log-actions">
+                <button class="btn-small" data-id="CR-2025-0032">Detalhes</button>
+                <button class="btn-small" data-id="CR-2025-0032">Relatório</button>
+              </div>
+            </li>
+            
+            <li class="resultado-item">
+              <div class="log-header">
+                <span class="log-id">ID: #CR-2025-0029</span>
+                <span class="log-date">08/04/2025 09:15</span>
+                <span class="log-status status-em_andamento">Em andamento</span>
+              </div>
+              <div class="log-content">
+                <strong>Tipo:</strong> Violência doméstica | 
+                <strong>Identificado:</strong> Sim | 
+                <strong>Perito:</strong> Carlos Mendes | 
+                <strong>Local:</strong> Rio de Janeiro, RJ
+              </div>
+              <div class="log-actions">
+                <button class="btn-small" data-id="CR-2025-0029">Detalhes</button>
+                <button class="btn-small" data-id="CR-2025-0029">Relatório</button>
+              </div>
+            </li>
+          </ul>
+
+          <div class="pagination">
+            <button id="prev-page" class="btn-secondary" disabled>Anterior</button>
+            <span id="page-info">Página 1 de 1</span>
+            <button id="next-page" class="btn-secondary" disabled>Próximo</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer>
+    <div class="footer-content">
+      <div class="footer-logo">
+        <img src="images/logo_dentefier.png" alt="DENTEFIER">
+        <p>DENTEFIER &copy; 2025</p>
+      </div>
+      <div class="footer-origin">
+        <p>Sistema de Gerenciamento de Casos Odontolegais</p>
+      </div>
+    </div>
+  </footer>
+
+
+</body>
+</html>

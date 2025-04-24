@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DENTEFIER - Gerenciamento de Usuários</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/gerenciar_usuario.css">
+  <script src="js/gerenciar_usuario.js" defer></script>
+  <script src="js/navbar.js" defer></script>
+</head>
+<body>
+  <!-- Banner principal -->
+  <div class="top-banner">
+    <div class="banner-content">
+      <div class="logo-container">
+        <img src="images/logo_dentefier.png" alt="Logo DENTEFIER" class="main-logo">
+      </div>
+      <div class="banner-text">
+        <h1>DENTEFIER</h1>
+        <span class="origin-badge">Laudos e Perícias</span>
+        <p>Sistema de Gerenciamento de Casos Odontolegais</p>
+      </div>
+    </div>
+    <div class="accessibility-tools">
+      <button class="access-btn" id="btn-contrast"><img src="images/icon-contrast.png" alt="Contraste"></button>
+      <button class="access-btn" id="btn-font-increase"><img src="images/icon-font-increase.png" alt="Aumentar fonte"></button>
+      <button class="access-btn" id="btn-font-decrease"><img src="images/icon-font-decrease.png" alt="Diminuir fonte"></button>
+    </div>
+  </div>
+  
+  <header>
+    <nav>
+      <ul>
+        <li><a href="dashboard.html">HOME</a></li>
+        <li><a href="gerenciar_casos.html">GERENCIAR CASOS</a></li>
+        <li class="admin-only"><a href="gerenciar_usuario.html" class="active">USUÁRIOS</a></li>
+        <li><a href="dashboard_busca.html">HISTÓRICO</a></li>
+        <li><a href="logout.html">SAIR</a></li>
+      </ul>
+    </nav>
+  </header>
+  
+  <main class="container">
+    <div class="welcome-section">
+      <h2>Gerenciamento de Usuários</h2>
+      <p class="user-role">Função: <span id="usuario-papel">Administrador</span></p>
+      <div class="date-info">
+        <p>Data: <span id="current-date">15 de Abril de 2025</span></p>
+      </div>
+    </div>
+    
+    <div class="user-management-container">
+      <div class="action-bar">
+        <h3>Lista de Usuários</h3>
+        <button class="btn-add-user" onclick="window.location.href='cadastro_usuario.html'">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 5V19M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Adicionar Novo Usuário
+        </button>
+      </div>
+      
+      <div class="filters-row">
+        <div class="search-container">
+          <input type="text" id="search-input" placeholder="Buscar por nome, email ou CPF..." onkeyup="filterUsers()">
+          <button class="btn-view" onclick="filterUsers()">Buscar</button>
+        </div>
+        
+        <div class="filter-group">
+          <label for="filter-tipo">Tipo:</label>
+          <select id="filter-tipo" onchange="filterUsers()">
+            <option value="">Todos</option>
+            <option value="admin">Administradores</option>
+            <option value="perito">Peritos</option>
+            <option value="assistente">Assistentes</option>
+          </select>
+        </div>
+        
+        <div class="filter-group">
+          <label for="filter-status">Status:</label>
+          <select id="filter-status" onchange="filterUsers()">
+            <option value="">Todos</option>
+            <option value="ativo">Ativos</option>
+            <option value="inativo">Inativos</option>
+          </select>
+        </div>
+      </div>
+      
+      <div class="table-container">
+        <table id="users-table">
+          <thead>
+            <tr>
+              <th onclick="sortTable(0)">Nome <span class="sort-icon">▼</span></th>
+              <th onclick="sortTable(1)">Email</th>
+              <th onclick="sortTable(2)">Telefone</th>
+              <th onclick="sortTable(3)">Tipo</th>
+              <th onclick="sortTable(4)">Status</th>
+              <th onclick="sortTable(5)">Data Cadastro</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody id="users-table-body">
+            <!-- Os dados dos usuários serão carregados aqui via JavaScript -->
+          </tbody>
+        </table>
+      </div>
+      
+      <div class="user-count">
+        Exibindo <span id="users-count">0</span> de <span id="total-users">0</span> usuários
+      </div>
+      
+      <div class="pagination" id="pagination">
+        <!-- Botões de paginação serão adicionados dinamicamente -->
+      </div>
+    </div>
+  </main>
+  
+  <!-- Modal de confirmação para exclusão -->
+  <div class="modal-overlay" id="delete-modal">
+    <div class="modal-content">
+      <h3 class="modal-title">Confirmar Exclusão</h3>
+      <p class="modal-message">Tem certeza que deseja excluir o usuário <strong id="user-to-delete"></strong>?</p>
+      <p>Esta ação não pode ser desfeita.</p>
+      <div class="modal-actions">
+        <button class="btn-cancel-modal" onclick="closeDeleteModal()">Cancelar</button>
+        <button class="btn-confirm-modal" onclick="confirmDelete()">Confirmar Exclusão</button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Notificação -->
+  <div class="notification" id="notification">
+    Operação realizada com sucesso!
+  </div>
+  
+  <footer>
+    <div class="footer-content">
+      <div class="footer-logo">
+        <img src="img/logo_dentefier.jpg" alt="Logo DENTEFIER">
+        <span>DENTEFIER</span>
+      </div>
+      <div class="footer-links">
+        <a href="termos.html">Termos de Uso</a>
+        <a href="privacidade.html">Política de Privacidade</a>
+        <a href="suporte.html">Suporte</a>
+      </div>
+      <div class="footer-origin">
+        <p>© 2025 DENTEFIER - Sistema de Gerenciamento de Casos Odontolegais</p>
+      </div>
+    </div>
+  </footer>
+  
+  <script>
+    // Dados simulados de usuários (serão substituídos por chamadas de API no futuro)
+const mockUsers = [
+  {
+    id: 1,
+    nome: "Ana Silva",
+    email: "ana.silva@dentefier.com",
+    telefone: "(11) 98765-4321",
+    tipo: "admin",
+    status: "ativo",
+    cpf: "123.456.789-00",
+    dataCadastro: "2025-01-15",
+    cargo: "Coordenadora de Sistemas",
+    especialidade: null,
+    registroProfissional: null
+  },
+  {
+    id: 2,
+    nome: "Carlos Mendes",
+    email: "carlos.mendes@dentefier.com",
+    telefone: "(11) 91234-5678",
+    tipo: "perito",
+    status: "ativo",
+    cpf: "987.654.321-00",
+    dataCadastro: "2025-02-10",
+    cargo: null,
+    especialidade: "Odontologia Legal",
+    registroProfissional: "CRO-SP 12345"
+  },
+  {
+    id: 3,
+    nome: "Marina Oliveira",
+    email: "marina.oliveira@dentefier.com",
+    telefone: "(11) 95555-4444",
+    tipo: "perito",
+    status: "ativo",
+    cpf: "456.789.123-00",
+    dataCadastro: "2025-02-15",
+    cargo: null,
+    especialidade: "Antropologia Forense",
+    registroProfissional: "CRO-SP 54321"
+  },
+  {
+    id: 4,
+    nome: "Rafael Santos",
+    email: "rafael.santos@dentefier.com",
+    telefone: "(11) 92222-3333",
+    tipo: "assistente",
+    status: "ativo",
+    cpf: "789.123.456-00",
+    dataCadastro: "2025-03-05",
+    cargo: null,
+    especialidade: null,
+    formacao: "Superior Completo",
+    areaSuporte: "Administrativa"
+  },
+  {
+    id: 5,
+    nome: "Juliana Ferreira",
+    email: "juliana.ferreira@dentefier.com",
+    telefone: "(11) 93333-2222",
+    tipo: "admin",
+    status: "inativo",
+    cpf: "321.654.987-00",
+    dataCadastro: "2024-12-01",
+    cargo: "Gerente de Operações",
+    especialidade: null,
+    registroProfissional: null
+  },
+  {
+    id: 6,
+    nome: "Eduardo Costa",
+    email: "eduardo.costa@dentefier.com",
+    telefone: "(11) 94444-5555",
+    tipo: "perito",
+    status: "ativo",
+    cpf: "654.987.321-00",
+    dataCadastro: "2025-01-25",
+    cargo: null,
+    especialidade: "Traumatologia Forense",
+    registroProfissional: "CRO-SP 98765"
+  },
+  {
+    id: 7,
+    nome: "Teresa Moraes",
+    email: "teresa.moraes@dentefier.com",
+    telefone: "(11) 96666-7777",
+    tipo: "assistente",
+    status: "inativo",
+    cpf: "159.753.852-00",
+    dataCadastro: "2024-11-15",
+    cargo: null,
+    especialidade: null,
+    formacao: "Técnico",
+    areaSuporte: "Laboratorial"
+  },
+  {
+    id: 8,
+    nome: "Lucas Andrade",
+    email: "lucas.andrade@dentefier.com",
+    telefone: "(11) 97777-8888",
+    tipo: "perito",
+    status: "ativo",
+    cpf: "258.963.147-00",
+    dataCadastro: "2025-03-10",
+    cargo: null,
+    especialidade: "Genética Forense",
+    registroProfissional: "CRBio-SP 123456"
+  },
+  {
+    id: 9,
+    nome: "Fernanda Lima",
+    email: "fernanda.lima@dentefier.com",
+    telefone: "(11) 98888-9999",
+    tipo: "assistente",
+    status: "ativo",
+    cpf: "753.159.846-00",
+    dataCadastro: "2025-03-20",
+    cargo: null,
+    especialidade: null,
+    formacao: "Superior Completo",
+    areaSuporte: "Jurídica"
+  },
+  {
+    id: 10,
+    nome: "Ricardo Gomes",
+    email: "ricardo.gomes@dentefier.com",
+    telefone: "(11) 99999-0000",
+    tipo: "admin",
+    status: "ativo",
+    cpf: "951.357.864-00",
+    dataCadastro: "2025-01-05",
+    cargo: "Diretor Técnico",
+    especialidade: null,
+    registroProfissional: null
+  }
+];
+
+// Variáveis de controle para paginação e ordenação
+let currentPage = 1;
+const rowsPerPage = 5;
+let currentSort = { column: 0, direction: 'asc' };
+let filteredUsers = [...mockUsers];
+let userToDeleteId = null;
+
+// Função para carregar a data atual
+function loadCurrentDate() {
+  const dataAtual = new Date();
+  const opcoes = { day: 'numeric', month: 'long', year: 'numeric' };
+  document.getElementById('current-date').textContent = dataAtual.toLocaleDateString('pt-BR', opcoes);
+}
+
+// Função para formatar a data de cadastro
+function formatDate(dateString) {
+  const date = new Date(dateString);
+  return date.toLocaleDateString('pt-BR');
+}
+
+// Função para renderizar os usuários na tabela
+function renderUsers() {
+  const tableBody = document.getElementById('users-table-body');
+  tableBody.innerHTML = '';
+  
+  // Calcular os índices de início e fim para a página atual
+  const startIndex = (currentPage - 1) * rowsPerPage;
+  const endIndex = Math.min(startIndex + rowsPerPage, filteredUsers.length);
+  
+  // Atualizar o contador de usuários
+  document.getElementById('users-count').textContent = filteredUsers.length > 0 ? 
+    `${startIndex + 1}-${endIndex}` : "0";
+  document.getElementById('total-users').textContent = filteredUsers.length;
+  
+  // Adicionar os usuários à tabela
+  for (let i = startIndex; i < endIndex; i++) {
+    const user = filteredUsers[i];
+    const row = document.createElement('tr');
+    
+    // Aplicar classe de estilo baseada no status
+    if (user.status === 'inativo') {
+      row.style.opacity = '0.7';
+    }
+    
+    row.innerHTML = `
+      <td>${user.nome}</td>
+      <td>${user.email}</td>
+      <td>${user.telefone}</td>
+      <td>
+        <span class="tag tag-${user.tipo}">
+          ${user.tipo === 'admin' ? 'Administrador' : 
+            user.tipo === 'perito' ? 'Perito' : 'Assistente'}
+        </span>
+      </td>
+      <td>${user.status === 'ativo' ? 
+        '<span style="color: #2ecc71;">●</span> Ativo' : 
+        '<span style="color: #e74c3c;">●</span> Inativo'}</td>
+      <td>${formatDate(user.dataCadastro)}</td>
+      <td>
+        <div class="table-actions">
+          <button class="btn-view" onclick="viewUser(${user.id})" title="Visualizar detalhes">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <button class="btn-edit" onclick="editUser(${user.id})" title="Editar usuário">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <button class="btn-delete" onclick="deleteUser(${user.id}, '${user.nome}')" title="Excluir usuário">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M3 6h18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </div>
+      </td>
+    `;
+    
+    tableBody.appendChild(row);
+  }
+  
+  // Atualizar a paginação
+  renderPagination();
+}
+
+// Função para renderizar a paginação
+function renderPagination() {
+  const paginationElement = document.getElementById('pagination');
+  paginationElement.innerHTML = '';
+  
+  const totalPages = Math.ceil(filteredUsers.length / rowsPerPage);
+  
+  // Adicionar botão para a primeira página
+  if (totalPages > 3 && currentPage > 2) {
+    const firstPageBtn = document.createElement('button');
+    firstPageBtn.textContent = '«';
+    firstPageBtn.title = "Primeira página";
+    firstPageBtn.onclick = () => goToPage(1);
+    paginationElement.appendChild(firstPageBtn);
+  }
+  
+  // Adicionar botão anterior
+  if (currentPage > 1) {
+    const prevBtn = document.createElement('button');
+    prevBtn.textContent = '‹';
+    prevBtn.title = "Página anterior";
+    prevBtn.onclick = () => goToPage(currentPage - 1);
+    paginationElement.appendChild(prevBtn);
+  }
+  
+  // Adicionar botões numéricos
+  let startPage = Math.max(1, currentPage - 1);
+  let endPage = Math.min(totalPages, startPage + 2);
+  
+  // Ajustar quando estamos perto do final
+  if (endPage - startPage < 2 && startPage > 1) {
+    startPage = Math.max(1, endPage - 2);
+  }
+  
+  for (let i = startPage; i <= endPage; i++) {
+    const pageBtn = document.createElement('button');
+    pageBtn.textContent = i;
+    pageBtn.onclick = () => goToPage(i);
+    
+    if (i === currentPage) {
+      pageBtn.className = 'active';
+    }
+    
+    paginationElement.appendChild(pageBtn);
+  }
+  
+  // Adicionar botão próximo
+  if (currentPage < totalPages) {
+    const nextBtn = document.createElement('button');
+    nextBtn.textContent = '›';
+    nextBtn.title = "Próxima página";
+    nextBtn.onclick = () => goToPage(currentPage + 1);
+    paginationElement.appendChild(nextBtn);
+  }
+  
+  // Adicionar botão para a última página
+  if (totalPages > 3 && currentPage < totalPages - 1) {
+    const lastPageBtn = document.createElement('button');
+    lastPageBtn.textContent = '»';
+    lastPageBtn.title = "Última página";
+    lastPageBtn.onclick = () => goToPage(totalPages);
+    paginationElement.appendChild(lastPageBtn);
+  }
+}
+
+// Função para navegar para uma página específica
+function goToPage(page) {
+  currentPage = page;
+  renderUsers();
+  
+  // Rolar para o topo da tabela
+  document.querySelector('.table-container').scrollIntoView({ behavior: 'smooth' });
+}
+
+// Função para ordenar a tabela por coluna
+function sortTable(columnIndex) {
+  // Se clicar na mesma coluna, inverte a direção
+  if (currentSort.column === columnIndex) {
+    currentSort.direction = currentSort.direction === 'asc' ? 'desc' : 'asc';
+  } else {
+    currentSort.column = columnIndex;
+    currentSort.direction = 'asc';
+  }
+  
+  // Atualizar os ícones de ordenação
+  const headers = document.querySelectorAll('th');
+  headers.forEach((header, index) => {
+    const icon = header.querySelector('.sort-icon');
+    if (icon) {
+      if (index === columnIndex) {
+        icon.textContent = currentSort.direction === 'asc' ? '▲' : '▼';
+      } else {
+        icon.textContent = '▼';
+      }
+    }
+  });
+  
+  // Ordenar os usuários com base na coluna selecionada
+  filteredUsers.sort((a, b) => {
+    let valueA, valueB;
+    
+    // Determinar os valores a serem comparados com base na coluna
+    switch(columnIndex) {
+      case 0: // Nome
+        valueA = a.nome.toLowerCase();
+        valueB = b.nome.toLowerCase();
+        break;
+      case 1: // Email
+        valueA = a.email.toLowerCase();
+        valueB = b.email.toLowerCase();
+        break;
+      case 2: // Telefone
+        valueA = a.telefone;
+        valueB = b.telefone;
+        break;
+      case 3: // Tipo
+        valueA = a.tipo;
+        valueB = b.tipo;
+        break;
+      case 4: // Status
+        valueA = a.status;
+        valueB = b.status;
+        break;
+      case 5: // Data Cadastro
+        valueA = new Date(a.dataCadastro).getTime();
+        valueB = new Date(b.dataCadastro).getTime();
+        break;
+      default:
+        valueA = a.nome.toLowerCase();
+        valueB = b.nome.toLowerCase();
+    }
+    
+    // Realizar a comparação
+    if (valueA < valueB) {
+      return currentSort.direction === 'asc' ? -1 : 1;
+    }
+    if (valueA > valueB) {
+      return currentSort.direction === 'asc' ? 1 : -1;
+    }
+    return 0;
+  });
+  
+  // Resetar para a primeira página e renderizar
+  currentPage = 1;
+  renderUsers();
+}
+
+// Função para filtrar usuários
+function filterUsers() {
+  const searchTerm = document.getElementById('search-input').value.toLowerCase();
+  const tipoFiltro = document.getElementById('filter-tipo').value;
+  const statusFiltro = document.getElementById('filter-status').value;
+  
+  filteredUsers = mockUsers.filter(user => {
+    // Filtrar por termo de busca (nome, email ou CPF)
+    const matchesSearch = searchTerm === '' || 
+      user.nome.toLowerCase().includes(searchTerm) ||
+      user.email.toLowerCase().includes(searchTerm) ||
+      user.cpf.includes(searchTerm);
+    
+    // Filtrar por tipo
+    const matchesTipo = tipoFiltro === '' || user.tipo === tipoFiltro;
+    
+    // Filtrar por status
+    const matchesStatus = statusFiltro === '' || user.status === statusFiltro;
+    
+    return matchesSearch && matchesTipo && matchesStatus;
+  });
+  
+  // Aplicar a ordenação atual
+  sortTable(currentSort.column);
+  
+  // Resetar para a primeira página
+  currentPage = 1;
+  renderUsers();
+}
+
+// Função para visualizar detalhes do usuário
+function viewUser(userId) {
+  const user = mockUsers.find(u => u.id === userId);
+  if (!user) return;
+  
+  // Aqui você pode implementar a lógica para exibir os detalhes do usuário
+  // Por exemplo, redirecionando para uma página de detalhes
+  // window.location.href = `visualizar_usuario.html?id=${userId}`;
+  
+  // Como exemplo, vamos mostrar um alerta com informações do usuário
+  showNotification(`Visualizando detalhes de ${user.nome}`, 'info');
+  
+  // Em um ambiente real, você redirecionaria para uma página de detalhes
+  console.log("Detalhes do usuário:", user);
+  alert(`Detalhes do usuário ${user.nome}:\n\nEmail: ${user.email}\nTelefone: ${user.telefone}\nCPF: ${user.cpf}\nTipo: ${user.tipo}\nStatus: ${user.status}\nData de Cadastro: ${formatDate(user.dataCadastro)}`);
+}
+
+// Função para editar usuário
+function editUser(userId) {
+  const user = mockUsers.find(u => u.id === userId);
+  if (!user) return;
+  
+  // Aqui você pode implementar a lógica para editar o usuário
+  // Por exemplo, redirecionando para uma página de edição
+  // window.location.href = `editar_usuario.html?id=${userId}`;
+  
+  showNotification(`Redirecionando para edição de ${user.nome}`, 'info');
+  
+  // Em um ambiente real, você redirecionaria para um formulário de edição
+  console.log("Editando usuário:", user);
+  alert(`Redirecionando para edição do usuário: ${user.nome}`);
+}
+
+// Função para mostrar o modal de confirmação de exclusão
+function deleteUser(userId, userName) {
+  userToDeleteId = userId;
+  document.getElementById('user-to-delete').textContent = userName;
+  document.getElementById('delete-modal').style.display = 'flex';
+}
+
+// Função para fechar o modal de confirmação
+function closeDeleteModal() {
+  document.getElementById('delete-modal').style.display = 'none';
+  userToDeleteId = null;
+}
+
+// Função para confirmar a exclusão do usuário
+function confirmDelete() {
+  if (userToDeleteId === null) return;
+  
+  // Encontrar o índice do usuário no array original
+  const userIndex = mockUsers.findIndex(u => u.id === userToDeleteId);
+  if (userIndex === -1) return;
+  
+  // Nome do usuário para a mensagem de notificação
+  const userName = mockUsers[userIndex].nome;
+  
+  // Remover o usuário do array original
+  mockUsers.splice(userIndex, 1);
+  
+  // Atualizar o array filtrado
+  filterUsers();
+  
+  // Fechar o modal
+  closeDeleteModal();
+  
+  // Mostrar notificação
+  showNotification(`Usuário ${userName} excluído com sucesso!`, 'success');
+}
+
+// Função para exibir notificações
+function showNotification(message, type = 'success') {
+  const notification = document.getElementById('notification');
+  notification.textContent = message;
+  
+  // Aplicar cor de acordo com o tipo
+  if (type === 'success') {
+    notification.style.backgroundColor = 'var(--cor-destaque)';
+  } else if (type === 'error') {
+    notification.style.backgroundColor = '#e74c3c';
+  } else if (type === 'info') {
+    notification.style.backgroundColor = '#3498db';
+  }
+  
+  // Mostrar a notificação
+  notification.classList.add('show');
+  
+  // Esconder após 3 segundos
+  setTimeout(() => {
+    notification.classList.remove('show');
+  }, 3000);
+}
+
+// Inicializar a página ao carregar
+document.addEventListener('DOMContentLoaded', function() {
+  loadCurrentDate();
+  // Aplicar ordenação inicial
+  sortTable(0);
+  // Carregar usuários
+  renderUsers();
+});
+</script> 

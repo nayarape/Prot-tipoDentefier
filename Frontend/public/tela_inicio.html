@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DENTEFIER - Sistema Odontolegal</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js" defer></script>
+  <script src="js/tela_inicio.js" defer></script>
+</head>
+<body>
+  <!-- Banner principal -->
+  <div class="top-banner">
+    <div class="banner-content">
+      <div class="logo-container">
+        <img src="images/logo_dentefier.png" alt="Logo DENTEFIER" class="main-logo">
+      </div>
+      <div class="banner-text">
+        <h1>DENTEFIER</h1>
+        <span class="origin-badge">Laudos e Perícias</span>
+        <p>Sistema de Gerenciamento de Casos Odontolegais</p>
+      </div>
+    </div>
+    <div class="accessibility-tools">
+      <button class="access-btn" id="btn-contrast"><img src="images/icon-contrast.png" alt="Contraste"></button>
+      <button class="access-btn" id="btn-font-increase"><img src="images/icon-font-increase.png" alt="Aumentar fonte"></button>
+      <button class="access-btn" id="btn-font-decrease"><img src="images/icon-font-decrease.png" alt="Diminuir fonte"></button>
+    </div>
+  </div>
+
+  <header>
+    <nav>
+      <ul>
+        <li><a href="tela_inicio.html" class="active">HOME</a></li>
+        <li><a href="gerenciar_casos.html">GERENCIAR CASOS</a></li>
+        <li class="admin-only"><a href="gerenciar_usuario.html">USUÁRIOS</a></li>
+        <li><a href="dashboard_busca.html">HISTÓRICO</a></li>
+        <li><a href="logout.html">SAIR</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="container">
+    <div class="welcome-section">
+      <h2>Bem-vindo(a), <span id="usuario-nome">Usuário</span> <small class="user-role">(<span id="usuario-papel">Perfil</span>)</small>!</h2>
+      <div class="date-info">
+        <p>Data: <span id="current-date"></span></p>
+      </div>
+    </div>
+
+    <div class="dashboard-grid">
+      <!-- Seção de resumo de casos -->
+      <section class="summary-section">
+        <h3>Resumo de Casos</h3>
+        <div class="cards-container">
+          <!-- Card 1 -->
+          <div class="card">
+            <h3>Casos Abertos</h3>
+            <div class="card-content">
+              <div class="card-number" id="casos-abertos">24</div>
+              <p>Em análise ou resolução</p>
+            </div>
+            <button><a href="casos.html?status=aberto" class="btn-link">Ver Detalhes</a></button>
+          </div>
+          
+          <!-- Card 2 -->
+          <div class="card">
+            <h3>Casos Encerrados</h3>
+            <div class="card-content">
+              <div class="card-number" id="casos-encerrados">16</div>
+              <p>Processos concluídos</p>
+            </div>
+            <button><a href="casos.html?status=encerrado" class="btn-link">Ver Detalhes</a></button>
+          </div>
+          
+          <!-- Card 3 -->
+          <div class="card">
+            <h3>Casos Arquivados</h3>
+            <div class="card-content">
+              <div class="card-number" id="casos-arquivados">42</div>
+              <p>Armazenados para referência</p>
+            </div>
+            <button><a href="casos.html?status=arquivado" class="btn-link">Ver Detalhes</a></button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Seção de gráficos -->
+      <section class="charts-section">
+        <h3>Estatísticas de Casos</h3>
+        <div class="charts-container">
+          <div class="chart-card">
+            <h4>Distribuição de Status</h4>
+            <canvas id="status-chart"></canvas>
+          </div>
+          <div class="chart-card">
+            <h4>Casos por Tipo</h4>
+            <canvas id="type-chart"></canvas>
+          </div>
+        </div>
+      </section>
+
+      <!-- Seção de casos por responsável (substituindo ações rápidas) -->
+      <section class="cases-by-expert">
+        <h3>Casos por Responsável</h3>
+        <div class="expert-stats">
+          <canvas id="expert-chart"></canvas>
+        </div>
+      </section>
+
+      <!-- Seção de atividades recentes (substituindo ações rápidas) -->
+      <section class="recent-activities">
+        <h3>Atividades Recentes</h3>
+        <div class="activity-list">
+          <div class="activity-item">
+            <div class="activity-icon update"></div>
+            <div class="activity-content">
+              <p class="activity-text"><strong>Relatório Atualizado</strong> no caso "Identificação de Restos Mortais 2023/01"</p>
+              <p class="activity-meta">Por: Dr. Silva | 10/04/2025 - 14:30</p>
+            </div>
+          </div>
+          <div class="activity-item">
+            <div class="activity-icon new"></div>
+            <div class="activity-content">
+              <p class="activity-text"><strong>Novo Caso Registrado:</strong> "Análise de Arcada - Acidente Automobilístico"</p>
+              <p class="activity-meta">Por: Dra. Oliveira | 09/04/2025 - 10:15</p>
+            </div>
+          </div>
+          <div class="activity-item">
+            <div class="activity-icon evidence"></div>
+            <div class="activity-content">
+              <p class="activity-text"><strong>Nova Evidência Adicionada</strong> ao caso "Trauma Facial - Caso 2025/42"</p>
+              <p class="activity-meta">Por: Assistente Carlos | 08/04/2025 - 16:45</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Tabela de casos recentes -->
+      <section class="recent-cases">
+        <div class="section-header">
+          <h3>Casos Recentes</h3>
+          <a href="casos.html" class="view-all">Ver todos</a>
+        </div>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Título</th>
+                <th>Tipo</th>
+                <th>Status</th>
+                <th>Data de Criação</th>
+                <th>Responsável</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Identificação de Restos Mortais 2023/01</td>
+                <td>Identificação Humana</td>
+                <td><span class="status-badge open">Em andamento</span></td>
+                <td>10/04/2025</td>
+                <td>Dr. Silva</td>
+                <td>
+                  <button class="table-btn view-btn">Ver</button>
+                  <button class="table-btn edit-btn admin-perito">Editar</button>
+                </td>
+              </tr>
+              <tr>
+                <td>Análise de Mordida - Caso Criminal 45/2025</td>
+                <td>Exame Criminal</td>
+                <td><span class="status-badge closed">Finalizado</span></td>
+                <td>05/04/2025</td>
+                <td>Dra. Oliveira</td>
+                <td>
+                  <button class="table-btn view-btn">Ver</button>
+                  <button class="table-btn edit-btn admin-perito">Editar</button>
+                </td>
+              </tr>
+              <tr>
+                <td>Trauma Facial - Acidente Automobilístico</td>
+                <td>Trauma</td>
+                <td><span class="status-badge archived">Arquivado</span></td>
+                <td>28/03/2025</td>
+                <td>Dr. Mendes</td>
+                <td>
+                  <button class="table-btn view-btn">Ver</button>
+                  <button class="table-btn edit-btn admin-perito">Editar</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-logo">
+        <img src="img/logo_dentefier.jpg" alt="DENTEFIER">
+        <p>DENTEFIER &copy; 2025</p>
+      </div>
+      
+      <div class="footer-origin">
+        <p>Sistema de Gerenciamento de Casos Odontolegais</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      // Atualizar a data atual
+      const options = { year: 'numeric', month: 'long', day: 'numeric' };
+      document.getElementById('current-date').textContent = new Date().toLocaleDateString('pt-BR', options);
+  
+      
+  
+      // Gráfico de status
+      const statusCtx = document.getElementById('status-chart').getContext('2d');
+      const statusChart = new Chart(statusCtx, {
+        type: 'doughnut',
+        data: {
+          labels: ['Em andamento', 'Finalizados', 'Arquivados'],
+          datasets: [{
+            data: [24, 16, 42],
+            backgroundColor: ['#FFD369', '#4CAF50', '#607D8B']
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              labels: {
+                color: '#FFFFFF'
+              }
+            }
+          }
+        }
+      });
+  
+      // Gráfico de tipos
+      const typeCtx = document.getElementById('type-chart').getContext('2d');
+      const typeChart = new Chart(typeCtx, {
+        type: 'bar',
+        data: {
+          labels: ['Identificação', 'Criminal', 'Trauma', 'Idade', 'Outro'],
+          datasets: [{
+            label: 'Número de Casos',
+            data: [15, 22, 18, 10, 17],
+            backgroundColor: '#FFD369'
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              labels: {
+                color: '#FFFFFF'
+              }
+            }
+          },
+          scales: {
+            x: {
+              beginAtZero: true,
+              ticks: {
+                color: '#FFFFFF'
+              }
+            },
+            y: {
+              beginAtZero: true,
+              ticks: {
+                color: '#FFFFFF'
+              }
+            }
+          }
+        }
+      });
+  
+      // Gráfico de peritos
+      const expertCtx = document.getElementById('expert-chart').getContext('2d');
+      const expertChart = new Chart(expertCtx, {
+        type: 'bar',
+        data: {
+          labels: ['Dr. Silva', 'Dra. Oliveira', 'Dr. Mendes', 'Dra. Santos', 'Dr. Costa'],
+          datasets: [{
+            label: 'Casos em Andamento',
+            data: [7, 5, 3, 6, 3],
+            backgroundColor: '#FFD369'
+          }]
+        },
+        options: {
+          indexAxis: 'y',
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              labels: {
+                color: '#FFFFFF'
+              }
+            }
+          },
+          scales: {
+            x: {
+              beginAtZero: true,
+              ticks: {
+                color: '#FFFFFF'
+              }
+            },
+            y: {
+              ticks: {
+                color: '#FFFFFF'
+              }
+            }
+          }
+        }
+      });
+  
+      // Verificar perfil do usuário e ajustar interface
+      function ajustarInterfacePorPerfil(perfil) {
+        document.getElementById('usuario-nome').textContent = 'Maria Silva';
+        document.getElementById('usuario-papel').textContent = perfil;
+  
+        const adminElements = document.querySelectorAll('.admin-only');
+        const adminPeritoElements = document.querySelectorAll('.admin-perito');
+  
+        if (perfil === 'Administrador') {
+          adminElements.forEach(el => el.style.display = 'block');
+          adminPeritoElements.forEach(el => el.style.display = 'block');
+        } else if (perfil === 'Perito') {
+          adminElements.forEach(el => el.style.display = 'none');
+          adminPeritoElements.forEach(el => el.style.display = 'block');
+        } else if (perfil === 'Assistente') {
+          adminElements.forEach(el => el.style.display = 'none');
+          adminPeritoElements.forEach(el => el.style.display = 'none');
+        }
+      }
+  
+      // Simulando um perfil para teste
+      ajustarInterfacePorPerfil('Administrador');
+    });
+  </script>
+  
+  
+</body>
+</html>

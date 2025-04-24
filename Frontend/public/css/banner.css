@@ -1,0 +1,105 @@
+/* Banner top inspirado na referência */
+.top-banner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--cor-secundaria);
+    padding: 15px 30px;
+    border-bottom: 3px solid var(--cor-destaque);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  }
+  
+  .banner-content {
+    display: flex;
+    align-items: center;
+  }
+  
+  .logo-container {
+    margin-right: 20px;
+  }
+  
+  .main-logo {
+    height: 70px;
+    width: auto;
+  }
+  
+  .banner-text h1 {
+    color: var(--cor-destaque);
+    font-size: 2.2rem;
+    margin: 0;
+    letter-spacing: 1px;
+  }
+  
+  .banner-text p {
+    color: var(--cor-texto);
+    margin: 5px 0;
+    font-size: 1rem;
+  }
+  
+.origin-badge {
+    display: inline-block;
+    background-color: var(--cor-destaque);
+    color: var(--cor-fundo);
+    padding: 2px 8px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    border-radius: 12px;
+    margin-top: 5px;
+  }
+  
+  .accessibility-tools {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .access-btn {
+    background-color: transparent;
+    border: 1px solid var(--cor-texto);
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .access-btn:hover {
+    background-color: var(--cor-destaque);
+    border-color: var(--cor-destaque);
+  }
+  
+  .access-btn img {
+    width: 20px;
+    height: 20px;
+  }
+  
+  /* Navegação ativa */
+  nav ul li a.active {
+    color: var(--cor-destaque);
+    font-weight: bold;
+    border-bottom: 2px solid var(--cor-destaque);
+  }
+  
+  .btn-link {
+    color: var(--cor-fundo);
+    text-decoration: none;
+  }
+  /* Layout de grid para o dashboard */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  @media (min-width: 992px) {
+    .dashboard-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .summary-section,
+    .recent-cases {
+      grid-column: span 2;
+    }
+  }

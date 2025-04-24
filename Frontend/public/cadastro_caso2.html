@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dashboard de Casos - Perito</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="css/Pperito2.css">
+  <script src="js/cadastro_caso2.js"></script>
+</head>
+
+<body>
+  <!-- Banner principal -->
+  <div class="top-banner">
+    <div class="banner-content">
+      <div class="logo-container">
+        <img src="images/logo_dentefier.png" alt="Logo DENTEFIER" class="main-logo">
+      </div>
+      <div class="banner-text">
+        <h1>DENTEFIER</h1>
+        <span class="origin-badge">Laudos e Perícias</span>
+        <p>Sistema de Gerenciamento de Casos Odontolegais</p>
+      </div>
+    </div>
+    <div class="accessibility-tools">
+      <button class="access-btn" id="btn-contrast"><img src="images/icon-contrast.png" alt="Contraste"></button>
+      <button class="access-btn" id="btn-font-increase"><img src="images/icon-font-increase.png" alt="Aumentar fonte"></button>
+      <button class="access-btn" id="btn-font-decrease"><img src="images/icon-font-decrease.png" alt="Diminuir fonte"></button>
+    </div>
+  </div>
+  <header>
+    <nav>
+      <ul>
+        <li><a href="tela_inicio.html" class="active">HOME</a></li>
+        <li><a href="gerenciar_casos.html">GERENCIAR CASOS</a></li>
+        <li class="admin-only"><a href="gerenciar_usuario.html">USUÁRIOS</a></li>
+        <li><a href="dashboard_busca.html">HISTÓRICO</a></li>
+        <li><a href="logout.html">SAIR</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section id="detalhesColeta">
+      <h2>Detalhes da Coleta e Procedimentos</h2>
+      <div class="container">
+        <form id="form-detalhes">
+          <!-- Local e Condições da Coleta -->
+          <div class="section-title">
+            <h3>3. Local e Condições da Coleta</h3>
+          </div>
+          <div class="form-group">
+            <input type="datetime-local" name="dataHoraColeta" placeholder="Data e hora da coleta" required class="input-large">
+          </div>
+          <div class="form-group">
+            <select name="localExame" required class="input-large">
+              <option value="">Selecione o local do exame</option>
+              <option value="Sala de necropsia">Sala de necropsia</option>
+              <option value="Cena do crime">Cena do crime</option>
+              <option value="Laboratório forense">Laboratório forense</option>
+              <option value="Hospital">Hospital</option>
+              <option value="Outro">Outro</option>
+            </select>
+          </div>
+          <div class="form-group" id="outroLocalContainer" style="display: none;">
+            <input type="text" name="outroLocal" id="outroLocalTexto" placeholder="Especifique o local do exame" class="input-large">
+          </div>
+          <div class="form-group">
+            <input type="text" name="profissionaisPresentes" placeholder="Nome dos profissionais presentes" required class="input-large">
+          </div>
+          <div class="form-group">
+            <input type="text" name="equipamentosUsados" placeholder="Equipamentos usados" required class="input-large">
+          </div>
+          <div class="form-group">
+            <label for="registroFotografico">Registro fotográfico:</label>
+            <input type="file" name="registroFotografico" id="registroFotografico" accept="image/*" multiple class="input-large">
+            <p class="file-hint">Selecione múltiplos arquivos segurando CTRL. Formatos aceitos: JPG, PNG, GIF. Tamanho máximo por arquivo: 5MB</p>
+          </div>
+
+          <!-- Procedimentos Realizados -->
+          <div class="section-title">
+            <h3>4. Procedimentos Realizados</h3>
+          </div>
+          <div class="form-group">
+            <label>Tipo de exame odontológico forense:</label>
+            <select name="tipoExameOdontologico" required class="input-large">
+              <option value="">Selecione o tipo de exame</option>
+              <option value="Identificação humana">Identificação humana</option>
+              <option value="Estimativa de idade">Estimativa de idade</option>
+              <option value="Avaliação de mordida">Avaliação de mordida</option>
+              <option value="Lesão bucomaxilofacial">Lesão bucomaxilofacial</option>
+              <option value="Confronto antemortem x postmortem">Confronto antemortem x postmortem</option>
+              <option value="Outro">Outro</option>
+            </select>
+          </div>
+          <div class="form-group" id="outroExameContainer" style="display: none;">
+            <input type="text" name="outroExame" id="outroExameTexto" placeholder="Especifique o tipo de exame" class="input-large">
+          </div>
+          <div class="form-group">
+            <label for="tecnicasAplicadas">Técnicas aplicadas:</label>
+            <textarea name="tecnicasAplicadas" id="tecnicasAplicadas" placeholder="Descreva as técnicas aplicadas" required class="input-large"></textarea>
+          </div>
+          <div class="form-group">
+            <label for="amostrasColetadas">Amostras coletadas:</label>
+            <textarea name="amostrasColetadas" id="amostrasColetadas" placeholder="DNA bucal, arcada, etc." required class="input-large"></textarea>
+          </div>
+
+          <!-- Informações Antemortem -->
+          <div class="section-title">
+            <h3>5. Informações Antemortem (se houver)</h3>
+          </div>
+          <div class="form-group">
+            <label>Dados odontológicos anteriores disponíveis?</label>
+            <select name="dadosAnteriores" required class="input-large">
+              <option value="">Selecione</option>
+              <option value="sim">Sim</option>
+              <option value="nao">Não</option>
+            </select>
+          </div>
+          <div id="uploadDadosAnteriores" style="display: none;">
+            <div class="form-group">
+              <label for="arquivosDadosAnteriores">Upload de arquivos:</label>
+              <input type="file" name="arquivosDadosAnteriores" id="arquivosDadosAnteriores" multiple class="input-large">
+              <p class="file-hint">Selecione múltiplos arquivos segurando CTRL. Formatos aceitos: PDF, JPG, PNG, DICOM.</p>
+            </div>
+          </div>
+          <div class="form-group">
+            <input type="text" name="dentistaResponsavel" placeholder="Dentista responsável (se houver)" class="input-large">
+          </div>
+          <div class="form-group">
+            <input type="text" name="familiarResponsavel" placeholder="Nome do familiar ou responsável por fornecer os dados" class="input-large">
+          </div>
+
+          <!-- Achados Odontológicos -->
+          <div class="section-title">
+            <h3>6. Achados Odontológicos (se houver)</h3>
+          </div>
+          <div class="form-group">
+            <label>Tabela odontológica:</label>
+            <div class="odonto-grid">
+              <div class="odonto-info">
+                <p>Selecione os dentes com alterações clínicas relevantes</p>
+              </div>
+              <div class="arcade-container">
+                <!-- Arcada superior -->
+                <div class="arcade superior">
+                  <div class="dente-container">
+                    <input type="checkbox" id="dente-18" name="dentes[]" value="18">
+                    <label for="dente-18">18</label>
+                  </div>
+                  <div class="dente-container">
+                    <input type="checkbox" id="dente-17" name="dentes[]" value="17">
+                    <label for="dente-17">17</label>
+                  </div>
+                  <div class="dente-container">
+                    <input type="checkbox" id="dente-16" name="dentes[]" value="16">
+                    <label for="dente-16">16</label>
+                  </div>
+                  <div class="dente-container">
+                    <input type="checkbox" id="dente-15" name="dentes[]" value="15">
+                    <label for="dente-15">15</label>
+                  </div>
+                  <div class="dente-container">
+                    <input type="checkbox" id="dente-14" name="dentes[]" value="14">
+                    <label for="dente-14">14</label>
+                  </div>
+                  <div class="dente-container">
+                    <input type="checkbox" id="dente-13" name="dentes[]" value="13">
+                    <label for="dente-13">13</label>
+                  </div>
+                  <div class="dente-container">
+                    <input type="checkbox" id="dente-12" name="dentes[]" value="12">
+                    <label for="dente-12">12</label>
+                  </div>
+                  <div class="dente-container">
+                    <input type="checkbox" id="dente-11" name="dentes[]" value="11">
+                    <label for="dente-11">11</label>
+                  </div>
+                  <div class="dente-container">
+                    <input type="checkbox" id="dente-21" name="dentes[]" value="21">
+                    <label for="dente-21">21</label>
+                  </div>
+                  <div class="dente-container">
+                    <input type="checkbox" id="dente-22" name="dentes[]" value="22">
+                    <label for="dente-22">22</label>
+                  </div>
+                  <div class="dente-container">
+                    <input type="checkbox" id="dente-23" name="dentes[]" value="23">
+                    <label for="dente-23">23</label>
+                  </div>
+                  <div class="dente-container">
+                    <input type="checkbox" id="dente-24" name="dentes[]" value="24">
+                    <label for="dente-24">24</label>
+                  </div>
+                  <div class="dente-container">
+                    <input type="checkbox" id="dente-25" name="dentes[]" value="25">
+                    <label for="dente-25">25</label>
+                  </div>
+                  <div class="dente-container">
+                    <input type="checkbox" id="dente-26" name="dentes[]" value="26">
+                    <label for="dente-26">26</label>
+                  </div>
+                  <div class="dente-container">
+                    <input type="checkbox" id="dente-27" name="dentes[]" value="27">
+                    <label for="dente-27">27</label>
+                  </div>
+                  <div class="dente-container">
+                    <input type="checkbox" id="dente-28" name="dentes[]" value="28">
+                    <label for="dente-28">28</label>
+                  </div>
+                </div>
+                <!-- Arcada inferior -->
+                <div class="arcade inferior">
+                  <div class="dente-container">
+                    <input type="checkbox" id="dente-48" name="dentes[]" value="48">
+                    <label for="dente-48">48</label>
+                  </div>
+                  <div class="dente-container">
+                    <input type="checkbox" id="dente-47" name="dentes[]" value="47">
+                    <label for="dente-47">47</label>
+                  </div>
+                  <div class="dente-container">
+                    <input type="checkbox" id="dente-46" name="dentes[]" value="46">
+                    <label for="dente-46">46</label>
+                  </div>
+                  <div class="dente-container">
+                    <input type="checkbox" id="dente-45" name="dentes[]" value="45">
+                    <label for="dente-45">45</label>
+                  </div>
+                  <div class="dente-container">
+                    <input type="checkbox" id="dente-44" name="dentes[]" value="44">
+                    <label for="dente-44">44</label>
+                  </div>
+                  <div class="dente-container">
+                    <input type="checkbox" id="dente-43" name="dentes[]" value="43">
+                    <label for="dente-43">43</label>
+                  </div>
+                  <div class="dente-container">
+                    <input type="checkbox" id="dente-42" name="dentes[]" value="42">
+                    <label for="dente-42">42</label>
+                  </div>
+                  <div class="dente-container">
+                    <input type="checkbox" id="dente-41" name="dentes[]" value="41">
+                    <label for="dente-41">41</label>
+                  </div>
+                  <div class="dente-container">
+                    <input type="checkbox" id="dente-31" name="dentes[]" value="31">
+                    <label for="dente-31">31</label>
+                  </div>
+                  <div class="dente-container">
+                    <input type="checkbox" id="dente-32" name="dentes[]" value="32">
+                    <label for="dente-32">32</label>
+                  </div>
+                  <div class="dente-container">
+                    <input type="checkbox" id="dente-33" name="dentes[]" value="33">
+                    <label for="dente-33">33</label>
+                  </div>
+                  <div class="dente-container">
+                    <input type="checkbox" id="dente-34" name="dentes[]" value="34">
+                    <label for="dente-34">34</label>
+                  </div>
+                  <div class="dente-container">
+                    <input type="checkbox" id="dente-35" name="dentes[]" value="35">
+                    <label for="dente-35">35</label>
+                  </div>
+                  <div class="dente-container">
+                    <input type="checkbox" id="dente-36" name="dentes[]" value="36">
+                    <label for="dente-36">36</label>
+                  </div>
+                  <div class="dente-container">
+                    <input type="checkbox" id="dente-37" name="dentes[]" value="37">
+                    <label for="dente-37">37</label>
+                  </div>
+                  <div class="dente-container">
+                    <input type="checkbox" id="dente-38" name="dentes[]" value="38">
+                    <label for="dente-38">38</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="lesoesEncontradas">Lesões encontradas:</label>
+            <textarea name="lesoesEncontradas" id="lesoesEncontradas" placeholder="Descreva as lesões encontradas" class="input-large"></textarea>
+          </div>
+          <div class="form-group">
+            <label for="fraturasTraumas">Fraturas/traumas:</label>
+            <textarea name="fraturasTraumas" id="fraturasTraumas" placeholder="Descreva as fraturas e traumas" class="input-large"></textarea>
+          </div>
+          <div class="form-group">
+            <label for="reconstrucoesProteticos">Reconstruções/protéticos:</label>
+            <textarea name="reconstrucoesProteticos" id="reconstrucoesProteticos" placeholder="Descreva reconstruções e elementos protéticos" class="input-large"></textarea>
+          </div>
+          <div class="form-group">
+            <label for="anomaliasDentarias">Anomalias dentárias:</label>
+            <textarea name="anomaliasDentarias" id="anomaliasDentarias" placeholder="Descreva anomalias dentárias encontradas" class="input-large"></textarea>
+          </div>
+          
+          <!-- Conclusão Preliminar -->
+          <div class="section-title">
+            <h3>7. Conclusão Preliminar</h3>
+          </div>
+          <div class="form-group">
+            <textarea name="conclusaoPreliminar" id="conclusaoPreliminar" placeholder="Descreva a conclusão preliminar do caso" class="input-large" rows="5"></textarea>
+          </div>
+          
+          <!-- Responsáveis pela Perícia -->
+          <div class="section-title">
+            <h3>8. Responsáveis pela Perícia</h3>
+          </div>
+          <div class="form-group">
+            <input type="text" name="nomePerito" placeholder="Nome do perito odontolegista" required class="input-large">
+          </div>
+          <div class="form-group">
+            <input type="text" name="cro" placeholder="CRO (Conselho Regional de Odontologia)" required class="input-large">
+          </div>
+          <div class="form-group">
+            <input type="text" name="instituicao" placeholder="Instituição" required class="input-large">
+          </div>
+          <div class="form-group">
+            <label for="assinatura">Assinatura digital / física:</label>
+            <input type="file" name="assinatura" id="assinatura" accept="image/*" class="input-large">
+            <p class="file-hint">Formatos aceitos: JPG, PNG, GIF. Tamanho máximo: 2MB</p>
+          </div>
+          <div class="form-group">
+            <input type="text" name="nomeAuxiliar" placeholder="Nome do auxiliar (se houver)" class="input-large">
+          </div>
+          
+          <!-- Observações Gerais -->
+          <div class="section-title">
+            <h3>9. Observações Gerais</h3>
+          </div>
+          <div class="form-group">
+            <textarea name="observacoesGerais" id="observacoesGerais" placeholder="Campo para observações e observações legais específicas" class="input-large" rows="4"></textarea>
+          </div>
+          
+          <!-- Anexo de evidências -->
+          <div class="section-title">
+            <h3>10. Anexo de evidências</h3>
+          </div>
+          <div class="form-group">
+            <div class="evidence-upload-container">
+              <label for="evidenciasUpload">Adicionar imagens de evidências:</label>
+              <input type="file" id="evidenciasUpload" accept="image/*" multiple class="input-large">
+              <p class="file-hint">Selecione múltiplos arquivos segurando CTRL. Formatos aceitos: JPG, PNG, GIF</p>
+              
+              <div class="upload-actions">
+                <button type="button" id="adicionarEvidencias" class="btn-secondary">Adicionar à galeria</button>
+              </div>
+            </div>
+            
+            <div class="evidence-gallery" id="galeriaEvidencias">
+              <!-- As imagens serão adicionadas aqui dinamicamente via JavaScript -->
+              <p class="no-evidence">Nenhuma evidência adicionada.</p>
+            </div>
+            
+            <!-- Modal para visualização de imagem -->
+            <div id="imageModal" class="image-modal">
+              <span class="close-modal">&times;</span>
+              <img class="modal-content" id="modalImage">
+              <div id="modalCaption"></div>
+            </div>
+          </div>
+          
+          <div class="action-buttons">
+            <button type="button" class="btn-proxima" onclick="window.location.href='cadastro_caso1.html'">🡰 Voltar</button>
+            <button type="button" class="btn-proxima" onclick="window.location.href='gerenciar_casos.html'">Salvar e Finalizar</button>
+           
+          </div>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-logo">
+        <img src="images/logo_dentefier.png" alt="DENTEFIER">
+        <p>DENTEFIER &copy; 2025</p>
+      </div>
+      <div class="footer-origin">
+        <p>Sistema de Gerenciamento de Casos Odontolegais</p>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
